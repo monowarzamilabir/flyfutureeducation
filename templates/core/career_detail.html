@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+{% include "partials/page_header.html" with eyebrow="Careers" title=job.title subtitle=job.department %}
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-3 gap-12">
+    <article class="lg:col-span-2">
+      <div class="flex flex-wrap gap-3 mb-8 text-sm">
+        <span class="px-3 py-1.5 rounded-full bg-brand-light font-semibold text-slate-600">{{ job.location }}</span>
+        <span class="px-3 py-1.5 rounded-full bg-brand-light font-semibold text-slate-600">{{ job.get_employment_type_display }}</span>
+        {% if job.application_deadline %}<span class="px-3 py-1.5 rounded-full bg-brand-light font-semibold text-slate-600">Apply by {{ job.application_deadline|date:"d M Y" }}</span>{% endif %}
+      </div>
+      <div class="prose max-w-none prose-headings:text-brand-navy prose-a:text-brand-blue">{{ job.description|safe }}</div>
+    </article>
+
+    <aside>
+      <div class="card p-6" id="apply">
+        <h3 class="font-display font-semibold text-brand-navy text-lg mb-5">Apply for This Role</h3>
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+          {{ form.website }}
+          {% include "partials/form_field.html" with field=form.full_name %}
+          {% include "partials/form_field.html" with field=form.email %}
+          {% include "partials/form_field.html" with field=form.phone %}
+          {% include "partials/form_field.html" with field=form.cover_note %}
+          {% include "partials/form_field.html" with field=form.resume %}
+          <button type="submit" class="btn-secondary w-full justify-center">Submit Application</button>
+        </form>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

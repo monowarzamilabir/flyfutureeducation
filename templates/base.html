@@ -1,0 +1,56 @@
+{% load static core_extras %}<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{{ meta_title|default:site_settings.default_meta_title }}{% endblock %}</title>
+<meta name="description" content="{% block meta_description %}{{ meta_description|default:site_settings.default_meta_description }}{% endblock %}">
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+{# --- Open Graph / social sharing --- #}
+<meta property="og:site_name" content="{{ site_settings.site_name }}">
+<meta property="og:title" content="{% block og_title %}{{ meta_title|default:site_settings.default_meta_title }}{% endblock %}">
+<meta property="og:description" content="{% block og_description %}{{ meta_description|default:site_settings.default_meta_description }}{% endblock %}">
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% block og_image %}{% if site_settings.default_og_image %}{{ request.scheme }}://{{ request.get_host }}{{ site_settings.default_og_image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/brand/logo-square.png' %}{% endif %}{% endblock %}">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/brand/favicon-32.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/brand/favicon-16.png' %}">
+<link rel="apple-touch-icon" href="{% static 'img/brand/apple-touch-icon.png' %}">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+{% block extra_head %}{% endblock %}
+</head>
+<body class="bg-white text-slate-700">
+
+<a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-brand-blue focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:font-semibold">Skip to main content</a>
+
+{% include "partials/navbar.html" %}
+
+<main id="main-content">
+{% if messages %}
+<div class="max-w-5xl mx-auto px-4 pt-6">
+  {% for message in messages %}
+  <div class="rounded-lg px-4 py-3 mb-3 text-sm font-medium {% if message.tags == 'success' %}bg-emerald-50 text-emerald-800 border border-emerald-200{% elif message.tags == 'error' %}bg-red-50 text-red-800 border border-red-200{% else %}bg-blue-50 text-blue-800 border border-blue-200{% endif %}" role="alert">
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% block content %}{% endblock %}
+</main>
+
+{% include "partials/footer.html" %}
+{% include "partials/floating_chat.html" %}
+
+<script src="{% static 'js/main.js' %}" defer></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

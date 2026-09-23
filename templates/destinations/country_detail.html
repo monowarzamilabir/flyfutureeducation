@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+
+<section class="relative bg-brand-navy text-white py-16 lg:py-20 overflow-hidden">
+  <div class="absolute inset-0 opacity-[0.07]" style="background-image:repeating-linear-gradient(135deg,#fff 0 1px,transparent 1px 18px);"></div>
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    {% if country.flag_image %}<img src="{{ country.flag_image.url }}" alt="{{ country.name }} flag" class="w-16 h-16 rounded-full mx-auto mb-4 ring-4 ring-white/30 object-cover">{% endif %}
+    <span class="section-eyebrow !text-brand-gold-light">Study Destination</span>
+    <h1 class="text-3xl md:text-4xl font-display font-semibold mb-3 text-white">Study in {{ country.name }}</h1>
+    {% if country.intake_seasons %}<p class="text-slate-200">Intake Seasons: {{ country.intake_seasons }}</p>{% endif %}
+  </div>
+</section>
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-3 gap-12">
+    <article class="lg:col-span-2 space-y-12">
+
+      {% if country.overview %}
+      <div>
+        <h2 class="text-xl font-display font-semibold text-brand-navy mb-4">Overview</h2>
+        <div class="prose max-w-none prose-headings:text-brand-navy prose-a:text-brand-blue">{{ country.overview|safe }}</div>
+      </div>
+      {% endif %}
+
+      {% if country.why_study_here %}
+      <div>
+        <h2 class="text-xl font-display font-semibold text-brand-navy mb-4">Why Study in {{ country.name }}?</h2>
+        <div class="prose max-w-none prose-headings:text-brand-navy prose-a:text-brand-blue">{{ country.why_study_here|safe }}</div>
+      </div>
+      {% endif %}
+
+      {% if country.visa_requirements %}
+      <div>
+        <h2 class="text-xl font-display font-semibold text-brand-navy mb-4">Visa Requirements</h2>
+        <div class="prose max-w-none prose-headings:text-brand-navy prose-a:text-brand-blue">{{ country.visa_requirements|safe }}</div>
+      </div>
+      {% endif %}
+
+      {% if country.work_rights %}
+      <div>
+        <h2 class="text-xl font-display font-semibold text-brand-navy mb-4">Working While You Study &amp; Post-Study Work</h2>
+        <div class="prose max-w-none prose-headings:text-brand-navy prose-a:text-brand-blue">{{ country.work_rights|safe }}</div>
+      </div>
+      {% endif %}
+
+      {% if universities %}
+      <div>
+        <h2 class="text-xl font-display font-semibold text-brand-navy mb-6">Popular Universities</h2>
+        <div class="grid sm:grid-cols-2 gap-5">
+          {% for uni in universities %}
+          <div class="card p-5 flex gap-4">
+            <div class="w-12 h-12 rounded-lg bg-brand-light overflow-hidden shrink-0 flex items-center justify-center">
+              {% if uni.logo %}<img src="{{ uni.logo.url }}" alt="{{ uni.name }}" class="w-full h-full object-cover">{% else %}{% icon "graduation" "w-6 h-6 text-brand-blue" %}{% endif %}
+            </div>
+            <div>
+              <h3 class="font-display font-semibold text-brand-navy text-sm">{{ uni.name }}</h3>
+              {% if uni.ranking %}<p class="text-xs text-brand-teal font-semibold">{{ uni.ranking }}</p>{% endif %}
+              {% if uni.tuition_range %}<p class="text-xs text-slate-500 mt-1">{{ uni.tuition_range }}</p>{% endif %}
+              {% if uni.website_url %}<a href="{{ uni.website_url }}" target="_blank" rel="noopener" class="text-xs font-semibold text-brand-blue mt-1 inline-block">Visit website &rarr;</a>{% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </article>
+
+    <aside class="lg:col-span-1">
+      <div class="card p-6 sticky top-28 space-y-5">
+        <h3 class="font-display font-semibold text-brand-navy text-lg">Quick Facts</h3>
+        <dl class="space-y-4 text-sm">
+          {% if country.tuition_range %}
+          <div class="flex gap-3"><dt class="text-brand-teal shrink-0">{% icon "coin" "w-5 h-5" %}</dt><dd><span class="block text-slate-400 text-xs">Tuition</span><span class="font-semibold text-brand-navy">{{ country.tuition_range }}</span></dd></div>
+          {% endif %}
+          {% if country.cost_of_living %}
+          <div class="flex gap-3"><dt class="text-brand-teal shrink-0">{% icon "home" "w-5 h-5" %}</dt><dd><span class="block text-slate-400 text-xs">Cost of Living</span><span class="font-semibold text-brand-navy">{{ country.cost_of_living }}</span></dd></div>
+          {% endif %}
+          {% if country.intake_seasons %}
+          <div class="flex gap-3"><dt class="text-brand-teal shrink-0">{% icon "clock" "w-5 h-5" %}</dt><dd><span class="block text-slate-400 text-xs">Intakes</span><span class="font-semibold text-brand-navy">{{ country.intake_seasons }}</span></dd></div>
+          {% endif %}
+        </dl>
+        <a href="{% url 'applications:apply' %}" class="btn-secondary w-full justify-center">Apply for {{ country.name }}</a>
+        <a href="{% url 'contact:contact' %}" class="btn-outline !border-brand-blue !text-brand-blue hover:!bg-brand-blue hover:!text-white w-full justify-center">Free Consultation</a>
+      </div>
+
+      {% if scholarships %}
+      <div class="mt-8">
+        <h3 class="font-display font-semibold text-brand-navy text-lg mb-4">Scholarships in {{ country.name }}</h3>
+        <div class="space-y-4">
+          {% for scholarship in scholarships %}
+          <a href="{{ scholarship.get_absolute_url }}" class="card p-4 flex items-center gap-3 hover:shadow-lg transition">
+            <span class="text-brand-teal shrink-0">{% icon "coin" "w-6 h-6" %}</span>
+            <span>
+              <span class="block font-semibold text-brand-navy text-sm">{{ scholarship.title }}</span>
+              <span class="block text-xs text-slate-400">{{ scholarship.amount_coverage }}</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </aside>
+  </div>
+</section>
+{% endblock %}

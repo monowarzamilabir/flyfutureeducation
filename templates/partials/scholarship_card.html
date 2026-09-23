@@ -1,0 +1,14 @@
+{% load core_extras %}
+<a href="{{ scholarship.get_absolute_url }}" class="card group flex flex-col overflow-hidden hover:border-brand-navy/30 hover:shadow-card transition duration-200">
+  <div class="h-32 bg-brand-navy flex items-center justify-center text-brand-gold-light">
+    {% icon "coin" "w-10 h-10" %}
+  </div>
+  <div class="ticket-tear"></div>
+  <div class="p-5 flex flex-col flex-1">
+    <h3 class="font-display font-semibold text-brand-navy mb-1">{{ scholarship.title }}</h3>
+    {% if scholarship.country %}<p class="font-mono text-[11px] text-brand-teal mb-2">{{ scholarship.country.name }}</p>{% endif %}
+    <p class="text-sm text-slate-500 flex-1">{{ scholarship.amount_coverage }}</p>
+    {% if scholarship.deadline %}<p class="text-xs text-slate-400 mt-3">Deadline: {{ scholarship.deadline|date:"d M Y" }}</p>{% endif %}
+    <span class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-navy">View details {% icon "arrow-right" "w-4 h-4" %}</span>
+  </div>
+</a>

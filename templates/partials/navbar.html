@@ -1,0 +1,92 @@
+{% load static core_extras %}
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+
+      <a href="{% url 'core:home' %}" class="flex items-center gap-3 shrink-0">
+        {% if site_settings.logo %}
+          <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }} logo" class="h-11 w-11 rounded-full object-cover">
+        {% else %}
+          <img src="{% static 'img/brand/logo.png' %}" alt="{{ site_settings.site_name }} logo" class="h-11 w-11 rounded-full object-cover">
+        {% endif %}
+        <span class="leading-tight">
+          <span class="block font-display font-semibold text-brand-navy text-lg -mb-0.5">Fly Future</span>
+          <span class="block font-mono text-[10px] tracking-[0.2em] text-brand-gold">EDUCATION</span>
+        </span>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-medium text-brand-navy/80 whitespace-nowrap">
+        <a href="{% url 'core:home' %}" class="hover:text-brand-navy hover:underline decoration-brand-gold decoration-2 underline-offset-[6px] transition">Home</a>
+        <a href="{% url 'core:about' %}" class="hover:text-brand-navy hover:underline decoration-brand-gold decoration-2 underline-offset-[6px] transition">About</a>
+        <a href="{% url 'services:list' %}" class="hover:text-brand-navy hover:underline decoration-brand-gold decoration-2 underline-offset-[6px] transition">Services</a>
+        <a href="{% url 'destinations:list' %}" class="hover:text-brand-navy hover:underline decoration-brand-gold decoration-2 underline-offset-[6px] transition">Destinations</a>
+        <a href="{% url 'scholarships:list' %}" class="hover:text-brand-navy hover:underline decoration-brand-gold decoration-2 underline-offset-[6px] transition">Scholarships</a>
+        <a href="{% url 'trainings:list' %}" class="hover:text-brand-navy hover:underline decoration-brand-gold decoration-2 underline-offset-[6px] transition">Test Prep</a>
+
+        <div class="relative" data-dropdown>
+          <button type="button" class="flex items-center gap-1 hover:text-brand-navy transition" data-dropdown-toggle>
+            Gallery {% icon "chevron-down" "w-4 h-4" %}
+          </button>
+          <div class="absolute left-0 top-full mt-2 w-44 rounded-[6px] bg-white shadow-card border border-slate-200 py-2 opacity-0 invisible translate-y-1 transition duration-150" data-dropdown-menu>
+            <a href="{% url 'gallery:albums' %}" class="block px-4 py-2 text-sm hover:bg-brand-light hover:text-brand-navy">Photo Gallery</a>
+            <a href="{% url 'gallery:videos' %}" class="block px-4 py-2 text-sm hover:bg-brand-light hover:text-brand-navy">Video Gallery</a>
+          </div>
+        </div>
+
+        <a href="{% url 'blog:list' %}" class="hover:text-brand-navy hover:underline decoration-brand-gold decoration-2 underline-offset-[6px] transition">Blog</a>
+
+        <div class="relative" data-dropdown>
+          <button type="button" class="flex items-center gap-1 hover:text-brand-navy transition" data-dropdown-toggle>
+            More {% icon "chevron-down" "w-4 h-4" %}
+          </button>
+          <div class="absolute left-0 top-full mt-2 w-48 rounded-[6px] bg-white shadow-card border border-slate-200 py-2 opacity-0 invisible translate-y-1 transition duration-150" data-dropdown-menu>
+            <a href="{% url 'team:list' %}" class="block px-4 py-2 text-sm hover:bg-brand-light hover:text-brand-navy">Our Consultants</a>
+            <a href="{% url 'core:testimonials' %}" class="block px-4 py-2 text-sm hover:bg-brand-light hover:text-brand-navy">Testimonials</a>
+            <a href="{% url 'core:faq' %}" class="block px-4 py-2 text-sm hover:bg-brand-light hover:text-brand-navy">FAQ</a>
+            <a href="{% url 'core:careers' %}" class="block px-4 py-2 text-sm hover:bg-brand-light hover:text-brand-navy">Careers</a>
+          </div>
+        </div>
+
+        <a href="{% url 'contact:contact' %}" class="hover:text-brand-navy hover:underline decoration-brand-gold decoration-2 underline-offset-[6px] transition">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="{% url 'core:search' %}" class="hidden sm:flex p-2 text-brand-navy/60 hover:text-brand-navy transition" aria-label="Search">
+          {% icon "search" "w-5 h-5" %}
+        </a>
+        <a href="{% url 'applications:apply' %}" class="hidden sm:inline-flex btn-primary !py-2.5 !px-5">Apply Now</a>
+        <button type="button" class="lg:hidden p-2 text-brand-navy" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false">
+          {% icon "menu" "w-7 h-7" %}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lg:hidden hidden fixed inset-0 z-50 bg-brand-navy/50" data-mobile-menu-backdrop>
+    <div class="absolute right-0 top-0 h-full w-80 max-w-[85%] bg-white shadow-2xl p-6 overflow-y-auto">
+      <div class="flex items-center justify-between mb-6">
+        <span class="font-display font-semibold text-brand-navy text-lg">Menu</span>
+        <button type="button" class="p-2 text-brand-navy" data-mobile-menu-close aria-label="Close menu">
+          {% icon "close" "w-6 h-6" %}
+        </button>
+      </div>
+      <nav class="flex flex-col gap-1 text-brand-navy font-medium">
+        <a href="{% url 'core:home' %}" class="py-2.5 border-b border-slate-200">Home</a>
+        <a href="{% url 'core:about' %}" class="py-2.5 border-b border-slate-200">About</a>
+        <a href="{% url 'services:list' %}" class="py-2.5 border-b border-slate-200">Services</a>
+        <a href="{% url 'destinations:list' %}" class="py-2.5 border-b border-slate-200">Destinations</a>
+        <a href="{% url 'scholarships:list' %}" class="py-2.5 border-b border-slate-200">Scholarships</a>
+        <a href="{% url 'trainings:list' %}" class="py-2.5 border-b border-slate-200">Test Prep</a>
+        <a href="{% url 'gallery:albums' %}" class="py-2.5 border-b border-slate-200">Photo Gallery</a>
+        <a href="{% url 'gallery:videos' %}" class="py-2.5 border-b border-slate-200">Video Gallery</a>
+        <a href="{% url 'blog:list' %}" class="py-2.5 border-b border-slate-200">Blog</a>
+        <a href="{% url 'team:list' %}" class="py-2.5 border-b border-slate-200">Our Consultants</a>
+        <a href="{% url 'core:testimonials' %}" class="py-2.5 border-b border-slate-200">Testimonials</a>
+        <a href="{% url 'core:faq' %}" class="py-2.5 border-b border-slate-200">FAQ</a>
+        <a href="{% url 'core:careers' %}" class="py-2.5 border-b border-slate-200">Careers</a>
+        <a href="{% url 'contact:contact' %}" class="py-2.5 border-b border-slate-200">Contact</a>
+        <a href="{% url 'applications:apply' %}" class="btn-primary mt-5 justify-center">Apply Now</a>
+      </nav>
+    </div>
+  </div>
+</header>

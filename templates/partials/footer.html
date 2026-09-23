@@ -1,0 +1,74 @@
+{% load static core_extras %}
+<footer class="bg-brand-navy text-slate-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+    <div>
+      <a href="{% url 'core:home' %}" class="flex items-center gap-3 mb-4">
+        <img src="{% if site_settings.logo %}{{ site_settings.logo.url }}{% else %}{% static 'img/brand/logo.png' %}{% endif %}" alt="{{ site_settings.site_name }} logo" class="h-11 w-11 rounded-full object-cover">
+        <span class="leading-tight">
+          <span class="block font-display font-semibold text-white text-lg -mb-0.5">Fly Future</span>
+          <span class="block font-mono text-[10px] tracking-[0.2em] text-brand-gold-light">EDUCATION</span>
+        </span>
+      </a>
+      <p class="text-sm text-slate-400 leading-relaxed mb-4">
+        {{ site_settings.about_short|default:"Fly Future Education helps Bangladeshi students study abroad with expert visa processing, admissions, and scholarship guidance." }}
+      </p>
+      <div class="flex items-center gap-3">
+        {% if site_settings.facebook_url %}
+        <a href="{{ site_settings.facebook_url }}" target="_blank" rel="noopener" class="p-2 rounded-[4px] border border-white/15 hover:border-brand-gold hover:text-brand-gold transition" aria-label="Facebook">{% icon "facebook" "w-4 h-4" %}</a>
+        {% endif %}
+        {% if site_settings.instagram_url %}
+        <a href="{{ site_settings.instagram_url }}" target="_blank" rel="noopener" class="p-2 rounded-[4px] border border-white/15 hover:border-brand-gold hover:text-brand-gold transition" aria-label="Instagram">{% icon "instagram" "w-4 h-4" %}</a>
+        {% endif %}
+        {% if site_settings.linkedin_url %}
+        <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" class="p-2 rounded-[4px] border border-white/15 hover:border-brand-gold hover:text-brand-gold transition" aria-label="LinkedIn">{% icon "linkedin" "w-4 h-4" %}</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div>
+      <h3 class="text-white font-display font-semibold mb-4">Quick links</h3>
+      <ul class="space-y-2.5 text-sm">
+        <li><a href="{% url 'core:about' %}" class="hover:text-brand-gold-light transition">About us</a></li>
+        <li><a href="{% url 'services:list' %}" class="hover:text-brand-gold-light transition">Our services</a></li>
+        <li><a href="{% url 'destinations:list' %}" class="hover:text-brand-gold-light transition">Destinations</a></li>
+        <li><a href="{% url 'scholarships:list' %}" class="hover:text-brand-gold-light transition">Scholarships</a></li>
+        <li><a href="{% url 'trainings:list' %}" class="hover:text-brand-gold-light transition">Test prep</a></li>
+        <li><a href="{% url 'team:list' %}" class="hover:text-brand-gold-light transition">Our consultants</a></li>
+        <li><a href="{% url 'blog:list' %}" class="hover:text-brand-gold-light transition">Blog &amp; news</a></li>
+        <li><a href="{% url 'core:careers' %}" class="hover:text-brand-gold-light transition">Careers</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-white font-display font-semibold mb-4">Resources</h3>
+      <ul class="space-y-2.5 text-sm">
+        <li><a href="{% url 'gallery:albums' %}" class="hover:text-brand-gold-light transition">Photo gallery</a></li>
+        <li><a href="{% url 'gallery:videos' %}" class="hover:text-brand-gold-light transition">Video gallery</a></li>
+        <li><a href="{% url 'core:testimonials' %}" class="hover:text-brand-gold-light transition">Testimonials</a></li>
+        <li><a href="{% url 'core:faq' %}" class="hover:text-brand-gold-light transition">FAQ</a></li>
+        <li><a href="{% url 'applications:apply' %}" class="hover:text-brand-gold-light transition">Apply now</a></li>
+        <li><a href="{% url 'core:privacy_policy' %}" class="hover:text-brand-gold-light transition">Privacy policy</a></li>
+        <li><a href="{% url 'core:terms_conditions' %}" class="hover:text-brand-gold-light transition">Terms &amp; conditions</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-white font-display font-semibold mb-4">Get in touch</h3>
+      <ul class="space-y-3 text-sm">
+        <li class="flex gap-2.5"><span class="text-brand-gold-light shrink-0 mt-0.5">{% icon "location" "w-5 h-5" %}</span><span>{{ site_settings.address }}</span></li>
+        <li class="flex gap-2.5"><span class="text-brand-gold-light shrink-0">{% icon "phone" "w-5 h-5" %}</span><a href="tel:{{ site_settings.phone_primary }}" class="hover:text-brand-gold-light transition">{{ site_settings.phone_primary }}</a></li>
+        <li class="flex gap-2.5"><span class="text-brand-gold-light shrink-0">{% icon "mail" "w-5 h-5" %}</span><a href="mailto:{{ site_settings.email }}" class="hover:text-brand-gold-light transition">{{ site_settings.email }}</a></li>
+        <li class="flex gap-2.5"><span class="text-brand-gold-light shrink-0">{% icon "clock" "w-5 h-5" %}</span><span>{{ site_settings.office_hours }}</span></li>
+      </ul>
+      <a href="{% url 'contact:contact' %}" class="btn-primary mt-5 !py-2.5 !px-5 text-sm">Free consultation</a>
+    </div>
+  </div>
+
+  <div class="border-t border-dashed border-white/15">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+      <p>&copy; {% now "Y" %} {{ site_settings.site_name }}. All rights reserved.</p>
+      <p>{{ site_settings.footer_text }}</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,11 @@
+{% if is_paginated %}
+<nav class="flex items-center justify-center gap-2 mt-14" aria-label="Pagination">
+  {% if page_obj.has_previous %}
+  <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}" class="px-4 py-2 rounded-[4px] border border-slate-200 text-sm font-semibold text-brand-navy hover:border-brand-navy transition">Previous</a>
+  {% endif %}
+  <span class="px-4 py-2 rounded-[4px] bg-brand-navy text-white text-sm font-mono">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+  <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number }}" class="px-4 py-2 rounded-[4px] border border-slate-200 text-sm font-semibold text-brand-navy hover:border-brand-navy transition">Next</a>
+  {% endif %}
+</nav>
+{% endif %}

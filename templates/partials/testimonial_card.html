@@ -1,0 +1,20 @@
+{% load core_extras %}
+<div class="card p-6 flex flex-col h-full">
+  <div class="flex text-brand-gold mb-3">
+    {% for _ in testimonial.rating|stars %}{% icon "star" "w-4 h-4" %}{% endfor %}
+  </div>
+  <p class="text-slate-600 text-sm leading-relaxed flex-1">&ldquo;{{ testimonial.message }}&rdquo;</p>
+  <div class="flex items-center gap-3 mt-5 pt-5 border-t border-dashed border-slate-200">
+    <div class="w-10 h-10 rounded-full overflow-hidden bg-brand-light shrink-0">
+      {% if testimonial.photo %}
+        <img src="{{ testimonial.photo.url }}" alt="{{ testimonial.name }}" class="w-full h-full object-cover">
+      {% else %}
+        <div class="w-full h-full flex items-center justify-center font-display font-semibold text-brand-navy">{{ testimonial.name|first }}</div>
+      {% endif %}
+    </div>
+    <div>
+      <p class="font-display font-semibold text-brand-navy text-sm">{{ testimonial.name }}</p>
+      <p class="text-xs text-slate-400">{{ testimonial.role }}</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-sans text-slate-600 antialiased bg-white;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display font-semibold text-brand-navy tracking-tight;
+  }
+  ::selection {
+    @apply bg-brand-gold/30 text-brand-navy;
+  }
+}
+
+@layer components {
+  /* ---- Buttons: a ticket stub, not a pill. Sharp-ish corners, ink/brass/paper only. ---- */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-[4px] px-6 py-3 font-semibold text-sm transition duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+  }
+  .btn-primary {
+    @apply btn bg-brand-gold text-brand-navy hover:bg-brand-navy hover:text-white focus-visible:ring-brand-gold;
+  }
+  .btn-outline {
+    @apply btn border border-white/60 text-white hover:bg-white hover:text-brand-navy focus-visible:ring-white;
+  }
+  .btn-secondary {
+    @apply btn bg-brand-navy text-white hover:bg-brand-blue-dark focus-visible:ring-brand-navy;
+  }
+  .btn-ghost {
+    @apply btn border border-brand-navy/15 text-brand-navy hover:border-brand-navy hover:bg-brand-navy hover:text-white focus-visible:ring-brand-navy;
+  }
+
+  /* ---- Section heading language: editorial, left-set, no repeating eyebrow-over-h2 template. ---- */
+  .section-title {
+    @apply font-display text-[2rem] md:text-[2.5rem] font-semibold leading-[1.08] tracking-tight text-brand-navy;
+  }
+  .section-eyebrow {
+    @apply inline-flex items-center gap-2 font-mono text-[12px] text-brand-gold mb-3 normal-case tracking-normal;
+  }
+  .section-eyebrow::before {
+    content: "";
+    @apply w-4 h-px bg-brand-gold;
+  }
+  .route {
+    @apply font-mono text-xs tracking-wide text-brand-blue;
+  }
+
+  /* ---- Cards: quiet by default. Hairline border, sharp corner, shadow earned on hover. ---- */
+  .card {
+    @apply bg-white rounded-[10px] border border-slate-200;
+  }
+
+  /* ---- Ticket motif: reserved for the hero and destinations — the one bold move. ---- */
+  .ticket {
+    @apply relative bg-white text-brand-navy rounded-[6px] shadow-ticket;
+  }
+  .ticket-tear {
+    @apply border-t-2 border-dashed border-brand-navy/15;
+  }
+  .ticket-tear-v {
+    @apply border-l-2 border-dashed border-brand-navy/15;
+  }
+
+  .form-input {
+    @apply w-full rounded-[6px] border border-slate-300 bg-white px-4 py-2.5 text-slate-800 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/15;
+  }
+  .form-label {
+    @apply block text-sm font-semibold text-brand-navy mb-1.5;
+  }
+  .hp-field {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+{% include "partials/page_header.html" with eyebrow="Start Your Journey" title="Apply Now" subtitle="Tell us about your study goals and a counsellor will contact you within 24 hours." %}
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-3 gap-12">
+
+    <form method="post" enctype="multipart/form-data" novalidate class="card p-8 lg:col-span-2">
+      {% csrf_token %}
+      {{ form.website }}
+
+      <div class="grid sm:grid-cols-2 gap-x-6">
+        {% include "partials/form_field.html" with field=form.full_name %}
+        {% include "partials/form_field.html" with field=form.email %}
+      </div>
+      <div class="grid sm:grid-cols-2 gap-x-6">
+        {% include "partials/form_field.html" with field=form.phone %}
+        {% include "partials/form_field.html" with field=form.country %}
+      </div>
+      <div class="grid sm:grid-cols-2 gap-x-6">
+        {% include "partials/form_field.html" with field=form.desired_program %}
+        {% include "partials/form_field.html" with field=form.preferred_intake %}
+      </div>
+      {% include "partials/form_field.html" with field=form.message %}
+      {% include "partials/form_field.html" with field=form.document %}
+
+      <button type="submit" class="btn-primary w-full sm:w-auto justify-center mt-2">Submit application {% icon "arrow-right" "w-4 h-4" %}</button>
+      <p class="text-xs text-slate-400 mt-4">By submitting, you agree to be contacted by Fly Future Education about your application. See our <a href="{% url 'core:privacy_policy' %}" class="underline hover:text-brand-navy">privacy policy</a>.</p>
+    </form>
+
+    <aside class="space-y-6">
+      <div class="card p-6">
+        <h3 class="font-display font-semibold text-brand-navy mb-4">What happens next</h3>
+        <ol class="space-y-4 text-sm">
+          <li class="flex gap-3"><span class="w-7 h-7 shrink-0 rounded-[4px] bg-brand-navy text-white font-mono text-xs flex items-center justify-center">1</span><span>A counsellor reviews your profile within 24 hours.</span></li>
+          <li class="flex gap-3"><span class="w-7 h-7 shrink-0 rounded-[4px] bg-brand-navy text-white font-mono text-xs flex items-center justify-center">2</span><span>We call/email you to discuss university and visa options.</span></li>
+          <li class="flex gap-3"><span class="w-7 h-7 shrink-0 rounded-[4px] bg-brand-navy text-white font-mono text-xs flex items-center justify-center">3</span><span>You get a free profile assessment and a clear roadmap.</span></li>
+        </ol>
+      </div>
+      <div class="card p-6">
+        <h3 class="font-display font-semibold text-brand-navy mb-4">Prefer to talk now?</h3>
+        <a href="tel:{{ site_settings.phone_primary }}" class="flex items-center gap-3 text-sm font-semibold text-brand-navy mb-3 hover:text-brand-blue">{% icon "phone" "w-5 h-5 text-brand-teal" %}{{ site_settings.phone_primary }}</a>
+        <a href="{{ site_settings.whatsapp_number|whatsapp_link:'Hi, I want to apply for a study-abroad program.' }}" target="_blank" rel="noopener" class="flex items-center gap-3 text-sm font-semibold text-brand-navy hover:text-brand-blue">{% icon "whatsapp" "w-5 h-5 text-[#25D366]" %}Chat on WhatsApp</a>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+{% include "partials/page_header.html" with eyebrow="Where You Can Go" title="Study Destinations" subtitle="Browse countries we support, with visa requirements, costs, and intake seasons." %}
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <form method="get" class="max-w-md mx-auto mb-12">
+      <div class="relative">
+        <input type="search" name="q" value="{{ query }}" placeholder="Search a country, e.g. Canada" class="form-input pl-11" data-live-filter>
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">{% icon "search" "w-5 h-5" %}</span>
+      </div>
+    </form>
+
+    {% if countries %}
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for country in countries %}{% include "partials/country_card.html" %}{% endfor %}
+    </div>
+    {% include "partials/pagination.html" %}
+    {% else %}
+    <p class="text-center text-slate-500 py-20">No destinations matched your search.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

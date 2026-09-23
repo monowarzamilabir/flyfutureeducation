@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block title %}Staff Login | Fly Future Education{% endblock %}
+{% block content %}
+<section class="min-h-[70vh] flex items-center justify-center py-20 bg-brand-light">
+  <div class="card w-full max-w-md p-8">
+    <div class="text-center mb-8">
+      <div class="w-14 h-14 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center mx-auto mb-4">{% icon "shield" "w-7 h-7" %}</div>
+      <h1 class="text-2xl font-display font-semibold text-brand-navy">Staff Login</h1>
+      <p class="text-sm text-slate-500 mt-1">Access the Fly Future Education staff area.</p>
+    </div>
+    {% if form.errors %}
+    <div class="rounded-lg bg-red-50 text-red-700 border border-red-200 px-4 py-3 text-sm mb-5">Invalid username or password. Please try again.</div>
+    {% endif %}
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="mb-4">
+        <label class="form-label" for="id_username">Username</label>
+        <input type="text" name="username" id="id_username" class="form-input" required autofocus>
+      </div>
+      <div class="mb-6">
+        <label class="form-label" for="id_password">Password</label>
+        <input type="password" name="password" id="id_password" class="form-input" required>
+      </div>
+      <input type="hidden" name="next" value="{{ next }}">
+      <button type="submit" class="btn-secondary w-full justify-center">Log In</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

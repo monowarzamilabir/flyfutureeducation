@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+{% include "partials/page_header.html" with eyebrow="Gallery" title="Photo Gallery" subtitle="Moments from our seminars, student send-offs, and events." %}
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {% if albums %}
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for album in albums %}
+      <a href="{{ album.get_absolute_url }}" class="card group overflow-hidden hover:-translate-y-1 hover:shadow-lg transition duration-200">
+        <div class="h-52 bg-gradient-to-br from-brand-blue to-brand-teal overflow-hidden">
+          {% if album.cover_image %}
+            <img src="{{ album.cover_image.url }}" alt="{{ album.title }}" class="h-full w-full object-cover group-hover:scale-105 transition duration-300">
+          {% else %}
+            <div class="h-full w-full flex items-center justify-center text-white/80">{% icon "camera" "w-12 h-12" %}</div>
+          {% endif %}
+        </div>
+        <div class="p-5">
+          <h3 class="font-display font-semibold text-brand-navy">{{ album.title }}</h3>
+          <p class="text-sm text-slate-500 mt-1">{{ album.photos.count }} photo{{ album.photos.count|pluralize }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% include "partials/pagination.html" %}
+    {% else %}
+    <p class="text-center text-slate-500 py-20">No photo albums yet.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

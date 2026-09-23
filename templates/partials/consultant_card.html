@@ -1,0 +1,11 @@
+<a href="{{ consultant.get_absolute_url }}" class="card group text-center p-6 hover:border-brand-navy/30 hover:shadow-card transition duration-200">
+  <div class="w-24 h-24 rounded-full mx-auto overflow-hidden bg-brand-light mb-4 ring-4 ring-brand-light">
+    {% if consultant.photo %}
+      <img src="{{ consultant.photo.url }}" alt="{{ consultant.name }}" class="w-full h-full object-cover">
+    {% else %}
+      <div class="w-full h-full flex items-center justify-center text-2xl font-display font-semibold text-brand-navy">{{ consultant.name|first }}</div>
+    {% endif %}
+  </div>
+  <h3 class="font-display font-semibold text-brand-navy">{{ consultant.name }}</h3>
+  <p class="text-sm text-brand-teal font-medium">{{ consultant.designation }}</p>
+</a>

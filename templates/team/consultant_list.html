@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+{% include "partials/page_header.html" with eyebrow="Meet The Experts" title="Our Consultants" subtitle="Licensed counsellors dedicated to guiding your study-abroad journey." %}
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {% if consultants %}
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for consultant in consultants %}{% include "partials/consultant_card.html" %}{% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center text-slate-500 py-20">Our team profiles are coming soon.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

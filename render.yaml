@@ -1,0 +1,93 @@
+# Render "Blueprint" — deploys the web service + PostgreSQL database together.
+# Usage: push this repo to GitHub, then in Render choose
+# "New +" -> "Blueprint" and point it at the repo. Render reads this file
+# automatically and provisions everything below.
+#
+# After the first deploy, add your custom domain in the web service's
+# "Settings -> Custom Domains" tab and follow Render's DNS instructions.
+#
+# --- FREE TIER NOTES (currently configured below) ---
+# - Free web services spin down after ~15 min of inactivity; the next visitor
+#   triggers a ~30-60s cold start while it wakes back up. Fine for a temporary
+#   demo, not ideal for real visitors.
+# - Free PostgreSQL databases on Render are automatically deleted ~30 days
+#   after creation. Fine for "temporary," but you'll need to upgrade (or
+#   recreate + reseed) before that if you want to keep this longer.
+# - Free web services do NOT support attached persistent Disks, so uploaded
+#   media (gallery photos, Apply Now resumes, admin-uploaded images) will be
+#   LOST whenever the service redeploys or restarts. Acceptable for a demo;
+#   not acceptable for real production data.
+#
+# --- TO UPGRADE TO PRODUCTION LATER ---
+# Change `plan: free` to `plan: starter` on both the database and the web
+# service below, and add back a persistent disk on the web service, e.g.:
+#   disk:
+#     name: flyfuture-media
+#     mountPath: /opt/render/project/src/media
+#     sizeGB: 1
+
+databases:
+  - name: flyfuture-db
+    databaseName: flyfuture
+    plan: free
+    region: singapore
+
+services:
+  - type: web
+    name: flyfuture-web
+    runtime: python
+    plan: free
+    region: singapore
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "python manage.py migrate --noinput && gunicorn flyfuture.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "flyfutureeducation.com,www.flyfutureeducation.com,.onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://flyfutureeducation.com,https://www.flyfutureeducation.com"
+      - key: SITE_URL
+        value: "https://www.flyfutureeducation.com"
+      - key: SITE_DOMAIN
+        value: "www.flyfutureeducation.com"
+      - key: DB_ENGINE
+        value: "django.db.backends.postgresql"
+      - key: DB_NAME
+        fromDatabase:
+          name: flyfuture-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: flyfuture-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: flyfuture-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: flyfuture-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: flyfuture-db
+          property: port
+      - key: EMAIL_BACKEND
+        value: "django.core.mail.backends.smtp.EmailBackend"
+      - key: EMAIL_HOST
+        value: "smtp.gmail.com"
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        value: "Fly Future Education <no-reply@flyfutureeducation.com>"
+      - key: ADMIN_NOTIFICATION_EMAIL
+        value: "flufutureeducation@gmail.com"

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+{% include "partials/page_header.html" with eyebrow="Our Services" title=service.title subtitle=service.short_description %}
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-3 gap-12">
+    <article class="lg:col-span-2">
+      {% if service.image %}
+      <img src="{{ service.image.url }}" alt="{{ service.title }}" class="rounded-2xl w-full h-72 object-cover mb-8 shadow-card">
+      {% endif %}
+      <div class="prose max-w-none prose-headings:text-brand-navy prose-a:text-brand-blue">
+        {{ service.body|safe }}
+      </div>
+
+      {% if related_services %}
+      <div class="mt-16">
+        <h2 class="text-xl font-display font-semibold text-brand-navy mb-6">Other Services You May Need</h2>
+        <div class="grid sm:grid-cols-3 gap-6">
+          {% for service in related_services %}{% include "partials/service_card.html" %}{% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </article>
+
+    <aside class="lg:col-span-1">
+      <div class="card p-6 sticky top-28">
+        <div class="w-14 h-14 rounded-xl bg-brand-light text-brand-blue flex items-center justify-center mb-5">
+          {% icon service.icon|default:"document" "w-7 h-7" %}
+        </div>
+        <h3 class="font-display font-semibold text-brand-navy text-lg mb-2">Need help with {{ service.title|lower }}?</h3>
+        <p class="text-sm text-slate-500 mb-6">Book a free consultation and our counsellors will guide you through every step.</p>
+        <a href="{% url 'applications:apply' %}" class="btn-secondary w-full justify-center mb-3">Apply Now</a>
+        <a href="{% url 'contact:contact' %}" class="btn-outline !border-brand-blue !text-brand-blue hover:!bg-brand-blue hover:!text-white w-full justify-center mb-3">Contact Us</a>
+        <a href="{{ site_settings.whatsapp_number|whatsapp_link:whatsapp_message }}" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 w-full py-3 rounded-full bg-[#25D366]/10 text-[#128C4A] font-semibold text-sm hover:bg-[#25D366]/20 transition">
+          {% icon "whatsapp" "w-4 h-4" %} Chat on WhatsApp
+        </a>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

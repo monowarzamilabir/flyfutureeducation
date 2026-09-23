@@ -1,0 +1,10 @@
+{# Usage: {% include "partials/page_header.html" with eyebrow="..." title="..." subtitle="..." %} #}
+<section class="relative bg-brand-navy text-white overflow-hidden">
+  <div class="absolute inset-0 opacity-[0.07]" style="background-image:repeating-linear-gradient(135deg,#fff 0 1px,transparent 1px 18px);"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10 lg:pt-16 lg:pb-12">
+    {% if eyebrow %}<span class="section-eyebrow !text-brand-gold-light">{{ eyebrow }}</span>{% endif %}
+    <h1 class="font-display text-3xl md:text-[2.5rem] font-semibold tracking-tight max-w-2xl text-white">{{ title }}</h1>
+    {% if subtitle %}<p class="text-slate-300 max-w-xl mt-3">{{ subtitle }}</p>{% endif %}
+  </div>
+  <div class="relative border-t-2 border-dashed border-white/15"></div>
+</section>

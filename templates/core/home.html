@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+{% load static core_extras %}
+
+{% block content %}
+
+{# ============================= HERO — the boarding pass ============================= #}
+<section class="relative bg-brand-navy text-white overflow-hidden" data-hero-slider>
+  <div class="absolute inset-0 opacity-[0.06]" style="background-image:repeating-linear-gradient(135deg,#fff 0 1px,transparent 1px 22px);"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 lg:pt-20">
+    <div class="grid lg:grid-cols-[1fr_300px] border border-white/15 rounded-t-[10px] overflow-hidden">
+
+      {# main stub #}
+      <div class="relative min-h-[400px] flex flex-col justify-center p-8 sm:p-12 lg:p-14 border-b-2 lg:border-b-0 lg:border-r-2 border-dashed border-white/20">
+        <div class="relative">
+          <div data-hero-slide class="transition-opacity duration-700 opacity-100">
+            <p class="font-mono text-xs tracking-wide text-brand-gold-light mb-5">DAC &#8594; ANYWHERE &nbsp;&middot;&nbsp; STUDY VISA MANIFEST</p>
+            <h1 class="font-display text-4xl md:text-5xl font-semibold leading-[1.05] mb-5 max-w-xl text-white">{{ site_settings.tagline }}</h1>
+            <p class="text-slate-300 text-lg mb-8 max-w-xl leading-relaxed">Fly Future Education guides Bangladeshi students end-to-end — admissions, visas, scholarships and test prep — for study destinations across Europe, North America, Australia and Asia.</p>
+            <div class="flex flex-wrap gap-4">
+              <a href="{% url 'applications:apply' %}" class="btn-primary">Apply now</a>
+              <a href="{% url 'contact:contact' %}" class="btn-outline">Free consultation</a>
+            </div>
+          </div>
+
+          <div data-hero-slide class="absolute inset-0 transition-opacity duration-700 opacity-0 pointer-events-none">
+            <p class="font-mono text-xs tracking-wide text-brand-gold-light mb-5">SCHOLARSHIPS &amp; FEE WAIVERS</p>
+            <h1 class="font-display text-4xl md:text-5xl font-semibold leading-[1.05] mb-5 max-w-xl text-white">Turn your ambition into a fully-funded degree</h1>
+            <p class="text-slate-300 text-lg mb-8 max-w-xl leading-relaxed">We match students with scholarships and tuition waivers across our partner universities, and handle the paperwork from application to award letter.</p>
+            <div class="flex flex-wrap gap-4">
+              <a href="{% url 'scholarships:list' %}" class="btn-primary">Browse scholarships</a>
+              <a href="{% url 'contact:contact' %}" class="btn-outline">Talk to a counsellor</a>
+            </div>
+          </div>
+
+          <div data-hero-slide class="absolute inset-0 transition-opacity duration-700 opacity-0 pointer-events-none">
+            <p class="font-mono text-xs tracking-wide text-brand-gold-light mb-5">VISA &amp; DOCUMENTATION</p>
+            <h1 class="font-display text-4xl md:text-5xl font-semibold leading-[1.05] mb-5 max-w-xl text-white">A high visa success rate, built on honest advice</h1>
+            <p class="text-slate-300 text-lg mb-8 max-w-xl leading-relaxed">From bank statements to embassy interviews, our licensed counsellors prepare every document so you can apply with confidence.</p>
+            <div class="flex flex-wrap gap-4">
+              <a href="{% url 'services:list' %}" class="btn-primary">Our visa services</a>
+              <a href="{% url 'core:faq' %}" class="btn-outline">Visa FAQs</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-2 mt-10 relative">
+          <button type="button" aria-label="Slide 1" data-hero-dot class="h-1.5 w-8 rounded-full bg-brand-gold transition-all"></button>
+          <button type="button" aria-label="Slide 2" data-hero-dot class="h-1.5 w-2.5 rounded-full bg-white/50 transition-all"></button>
+          <button type="button" aria-label="Slide 3" data-hero-dot class="h-1.5 w-2.5 rounded-full bg-white/50 transition-all"></button>
+        </div>
+      </div>
+
+      {# route stub #}
+      <div class="hidden lg:flex flex-col justify-between p-10 bg-white/[0.03]">
+        <div>
+          <p class="font-mono text-[11px] tracking-[0.2em] text-white/45 mb-6">BOARDING PASS</p>
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-display text-3xl font-semibold">DAC</span>
+            <span class="text-brand-gold-light">{% icon "plane" "w-5 h-5" %}</span>
+            <span class="font-display text-3xl font-semibold">{% firstof destinations.0.name|slice:":3"|upper "YOU" %}</span>
+          </div>
+          <div class="flex items-center justify-between text-[11px] font-mono text-white/45 mb-8">
+            <span>DHAKA</span>
+            <span>{% firstof destinations.0.name "YOUR FUTURE" %}</span>
+          </div>
+          <dl class="space-y-3 font-mono text-xs text-white/70">
+            <div class="flex justify-between"><dt>PASSENGER</dt><dd class="text-white">YOU</dd></div>
+            <div class="flex justify-between"><dt>SERVICE</dt><dd class="text-white">FULLY GUIDED</dd></div>
+            <div class="flex justify-between"><dt>STATUS</dt><dd class="text-brand-gold-light">CONFIRMED</dd></div>
+          </dl>
+        </div>
+        <div class="pt-6 mt-6 border-t-2 border-dashed border-white/20">
+          <p class="text-[11px] font-mono text-white/45 mb-3">POPULAR ROUTES</p>
+          <div class="flex -space-x-2">
+            {% for c in destinations|slice:":6" %}
+            <span class="w-9 h-9 rounded-full ring-2 ring-brand-navy overflow-hidden bg-white/10 flex items-center justify-center text-[10px] font-bold" title="{{ c.name }}">
+              {% if c.flag_image %}<img src="{{ c.flag_image.url }}" class="w-full h-full object-cover" alt="{{ c.name }}">{% else %}{{ c.name|slice:":2" }}{% endif %}
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="h-3 border border-t-0 border-white/15 rounded-b-[10px] bg-perf-h" style="background-size: 18px 100%; background-position: center;"></div>
+  </div>
+  <div class="h-14 lg:h-20"></div>
+</section>
+
+{# ============================= ABOUT ============================= #}
+<section class="py-20 lg:py-28">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-14 items-center">
+    <div class="relative">
+      <div class="rounded-[10px] overflow-hidden aspect-[4/3] grid grid-cols-2 grid-rows-2 gap-1.5 bg-brand-light border border-slate-200">
+        {% for country in destinations|slice:":4" %}
+        <div class="relative overflow-hidden group">
+          {% if country.hero_image %}
+          <img src="{{ country.hero_image.url }}" alt="Study in {{ country.name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent"></div>
+          {% else %}
+          <div class="w-full h-full bg-brand-navy/90 flex items-center justify-center">
+            {% icon "graduation" "w-10 h-10 text-white/70" %}
+          </div>
+          {% endif %}
+          <span class="absolute bottom-2 left-2.5 text-white text-xs font-semibold drop-shadow">{{ country.name }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="absolute -bottom-6 -right-6 bg-white rounded-[6px] border border-slate-200 shadow-card px-6 py-5 hidden sm:block">
+        <p class="font-display text-3xl font-semibold text-brand-navy">{{ destinations_count }}+</p>
+        <p class="text-xs text-slate-500 mt-0.5">Study destinations</p>
+      </div>
+    </div>
+    <div>
+      <h2 class="section-title mb-5">Your trusted partner for studying abroad</h2>
+      <p class="text-slate-500 leading-relaxed mb-4">
+        Fly Future Education is a Dhaka-based study-abroad consultancy helping students turn ambition into
+        admission. From your first counselling session to the day you board your flight, our licensed
+        consultants manage university selection, application, visa documentation and scholarship guidance —
+        honestly, transparently, and without hidden costs.
+      </p>
+      <p class="text-slate-500 leading-relaxed mb-8">
+        We believe every student deserves accurate advice from an authorized consultancy — not shortcuts or
+        false promises. That commitment has helped thousands of students build futures in Europe, North
+        America, Australia and Asia.
+      </p>
+      <ul class="grid sm:grid-cols-2 gap-x-6 gap-y-3 mb-8">
+        <li class="flex items-center gap-2.5 text-sm font-medium text-brand-navy"><span class="text-brand-teal">{% icon "check-circle" "w-5 h-5" %}</span>Free profile assessment</li>
+        <li class="flex items-center gap-2.5 text-sm font-medium text-brand-navy"><span class="text-brand-teal">{% icon "check-circle" "w-5 h-5" %}</span>End-to-end visa support</li>
+        <li class="flex items-center gap-2.5 text-sm font-medium text-brand-navy"><span class="text-brand-teal">{% icon "check-circle" "w-5 h-5" %}</span>Scholarship matching</li>
+        <li class="flex items-center gap-2.5 text-sm font-medium text-brand-navy"><span class="text-brand-teal">{% icon "check-circle" "w-5 h-5" %}</span>IELTS / PTE coaching</li>
+        <li class="flex items-center gap-2.5 text-sm font-medium text-brand-navy"><span class="text-brand-teal">{% icon "check-circle" "w-5 h-5" %}</span>Bank &amp; document guidance</li>
+        <li class="flex items-center gap-2.5 text-sm font-medium text-brand-navy"><span class="text-brand-teal">{% icon "check-circle" "w-5 h-5" %}</span>Post-arrival assistance</li>
+      </ul>
+      <a href="{% url 'core:about' %}" class="btn-ghost">More about us</a>
+    </div>
+  </div>
+</section>
+
+{# ============================= SERVICES ============================= #}
+<section class="py-20 lg:py-28 bg-brand-light border-y border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
+      <h2 class="section-title max-w-md">Complete study-abroad services, under one roof</h2>
+      <p class="text-slate-500 max-w-sm">Everything you need from your first consultation to your first day on campus.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {% for service in services %}{% include "partials/service_card.html" %}{% endfor %}
+    </div>
+    <div class="mt-12">
+      <a href="{% url 'services:list' %}" class="btn-ghost">View all services</a>
+    </div>
+  </div>
+</section>
+
+{# ============================= DESTINATIONS — the ticket rack ============================= #}
+<section class="py-20 lg:py-28">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
+      <h2 class="section-title max-w-md">Popular study destinations</h2>
+      <p class="text-slate-500 max-w-sm">Applications supported across top destinations in Europe, North America, Australia and Asia.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {% for country in destinations %}{% include "partials/country_card.html" %}{% endfor %}
+    </div>
+    <div class="mt-12">
+      <a href="{% url 'destinations:list' %}" class="btn-ghost">Explore all destinations</a>
+    </div>
+  </div>
+</section>
+
+{# ============================= PROCESS — your itinerary ============================= #}
+<section class="py-20 lg:py-28 bg-brand-navy text-white relative overflow-hidden">
+  <div class="absolute inset-0 opacity-[0.06]" style="background-image:repeating-linear-gradient(135deg,#fff 0 1px,transparent 1px 22px);"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-16 max-w-md">
+      <h2 class="section-title !text-white">Your itinerary</h2>
+      <p class="text-slate-300 mt-3">Four checkpoints between where you are now and your first day on campus.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 relative">
+      <div class="hidden lg:block absolute top-4 left-0 right-0 border-t-2 border-dashed border-white/15"></div>
+      {% for step in process_steps %}
+      <div class="relative">
+        <p class="font-mono text-xs text-brand-gold-light mb-4 relative z-10 bg-brand-navy inline-block pr-3">{{ step.step_number|default:forloop.counter|stringformat:"02d" }}</p>
+        <h3 class="font-display font-semibold text-lg mb-2 text-white">{{ step.title }}</h3>
+        <p class="text-sm text-slate-300 leading-relaxed">{{ step.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ============================= BENEFITS ============================= #}
+<section class="py-20 lg:py-28 bg-brand-light border-y border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="section-title max-w-md mb-14">What makes Fly Future Education different</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for benefit in benefits %}
+      <div class="card p-6 flex gap-4">
+        <div class="w-11 h-11 shrink-0 rounded-[6px] bg-brand-navy/5 text-brand-navy flex items-center justify-center">{% icon benefit.icon|default:"shield" "w-5 h-5" %}</div>
+        <div>
+          <h3 class="font-display font-semibold text-brand-navy mb-1">{{ benefit.title }}</h3>
+          <p class="text-sm text-slate-500 leading-relaxed">{{ benefit.description }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ============================= TEAM ============================= #}
+<section class="py-20 lg:py-28">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
+      <h2 class="section-title max-w-md">Meet the counsellors</h2>
+      <p class="text-slate-500 max-w-sm">Licensed consultants who've guided thousands of applications to a decision.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {% for consultant in team %}{% include "partials/consultant_card.html" %}{% endfor %}
+    </div>
+    <div class="mt-12">
+      <a href="{% url 'team:list' %}" class="btn-ghost">Meet the full team</a>
+    </div>
+  </div>
+</section>
+
+{# ============================= TESTIMONIALS ============================= #}
+<section class="py-20 lg:py-28 bg-brand-light border-y border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="section-title max-w-md mb-14">What our students say</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for testimonial in testimonials %}{% include "partials/testimonial_card.html" %}{% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ============================= STATS — flight summary strip ============================= #}
+<section class="py-14 bg-brand-navy text-white border-y-2 border-dashed border-white/15">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center lg:text-left divide-x-0 lg:divide-x lg:divide-dashed lg:divide-white/15">
+    {% for stat in stats %}
+    <div class="lg:px-6 first:pl-0">
+      <p class="font-display text-4xl md:text-5xl font-semibold text-brand-gold-light"><span data-counter="{{ stat.value }}">0</span>{{ stat.suffix }}</p>
+      <p class="text-sm text-slate-300 mt-2">{{ stat.label }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+{# ============================= BLOG PREVIEW ============================= #}
+{% if latest_posts %}
+<section class="py-20 lg:py-28">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
+      <h2 class="section-title max-w-md">News, tips &amp; updates</h2>
+      <p class="text-slate-500 max-w-sm">The latest from our counsellors on visas, admissions and test prep.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for post in latest_posts %}{% include "partials/post_card.html" %}{% endfor %}
+    </div>
+    <div class="mt-12">
+      <a href="{% url 'blog:list' %}" class="btn-ghost">Read more articles</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ============================= FINAL CTA ============================= #}
+<section class="py-20 bg-brand-navy text-white text-center relative overflow-hidden border-t-2 border-dashed border-white/15">
+  <div class="relative max-w-2xl mx-auto px-4">
+    <h2 class="section-title !text-white mb-4">Ready to start your study-abroad journey?</h2>
+    <p class="text-slate-300 mb-8">Book a free consultation with a Fly Future Education counsellor today.</p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="{% url 'applications:apply' %}" class="btn-primary">Apply now</a>
+      <a href="{% url 'contact:contact' %}" class="btn-outline">Contact us</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

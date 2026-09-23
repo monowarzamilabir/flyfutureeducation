@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+{% include "partials/page_header.html" with eyebrow="Search" title="Search Fly Future Education" %}
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <form method="get" class="relative mb-14">
+      <input type="search" name="q" value="{{ query }}" placeholder="Search services, articles..." class="form-input pl-11" autofocus>
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">{% icon "search" "w-5 h-5" %}</span>
+    </form>
+
+    {% if query %}
+      {% if services or posts %}
+      <div class="space-y-12">
+        {% if services %}
+        <div>
+          <h2 class="text-lg font-display font-semibold text-brand-navy mb-4">Services ({{ services|length }})</h2>
+          <div class="space-y-3">
+            {% for service in services %}
+            <a href="{{ service.get_absolute_url }}" class="card p-4 flex items-center gap-3 hover:shadow-lg transition">
+              <span class="text-brand-teal shrink-0">{% icon service.icon|default:"document" "w-6 h-6" %}</span>
+              <span class="font-semibold text-brand-navy">{{ service.title }}</span>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% if posts %}
+        <div>
+          <h2 class="text-lg font-display font-semibold text-brand-navy mb-4">Blog Articles ({{ posts|length }})</h2>
+          <div class="grid sm:grid-cols-2 gap-6">
+            {% for post in posts %}{% include "partials/post_card.html" %}{% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      {% else %}
+      <p class="text-center text-slate-500 py-10">No results found for "{{ query }}".</p>
+      {% endif %}
+    {% else %}
+    <p class="text-center text-slate-500 py-10">Type a keyword above to search our services and articles.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

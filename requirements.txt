@@ -1,0 +1,17 @@
+asgiref==3.12.1
+Django==5.1.15
+django-ckeditor==6.7.3
+django-environ==0.14.0
+django-js-asset==4.0.1
+django-taggit==6.1.0
+gunicorn==26.0.0
+packaging==26.2
+pillow==12.3.0
+psycopg2-binary==2.9.12
+sqlparse==0.5.5
+tzdata==2026.3
+whitenoise==6.12.0
+
+# Optional: uncomment if you enable USE_S3=True in .env for S3-compatible
+# production media/static storage.
+# django-storages==1.14.4

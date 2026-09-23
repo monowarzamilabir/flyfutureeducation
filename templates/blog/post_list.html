@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+{% include "partials/page_header.html" with eyebrow="Resources" title="Blog, News & Events" subtitle="Study-abroad tips, visa updates, scholarship news, and events from Fly Future Education." %}
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-10">
+      <div class="flex flex-wrap gap-2">
+        <a href="{% url 'blog:list' %}" class="px-4 py-1.5 rounded-full text-sm font-semibold transition {% if not current_category and not current_tag %}bg-brand-blue text-white{% else %}bg-brand-light text-slate-600 hover:bg-brand-blue/10{% endif %}">All</a>
+        {% for category in categories %}
+        <a href="{% url 'blog:category' category.slug %}" class="px-4 py-1.5 rounded-full text-sm font-semibold transition {% if current_category == category.slug %}bg-brand-blue text-white{% else %}bg-brand-light text-slate-600 hover:bg-brand-blue/10{% endif %}">{{ category.name }}</a>
+        {% endfor %}
+      </div>
+      <form method="get" class="relative">
+        <input type="search" name="q" value="{{ query }}" placeholder="Search articles..." class="form-input pl-11 w-56">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">{% icon "search" "w-5 h-5" %}</span>
+      </form>
+    </div>
+
+    {% if posts %}
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for post in posts %}{% include "partials/post_card.html" %}{% endfor %}
+    </div>
+    {% include "partials/pagination.html" %}
+    {% else %}
+    <p class="text-center text-slate-500 py-20">No articles found{% if query %} for "{{ query }}"{% endif %}.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

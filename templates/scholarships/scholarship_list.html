@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+{% include "partials/page_header.html" with eyebrow="Fund Your Future" title="Scholarships" subtitle="Scholarship and tuition-waiver opportunities curated by our counsellors." %}
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {% if scholarships %}
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for scholarship in scholarships %}{% include "partials/scholarship_card.html" %}{% endfor %}
+    </div>
+    {% include "partials/pagination.html" %}
+    {% else %}
+    <p class="text-center text-slate-500 py-20">No scholarships listed right now. Check back soon or contact us for current opportunities.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

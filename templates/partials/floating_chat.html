@@ -1,0 +1,16 @@
+{% load core_extras %}
+<div class="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
+  {% if site_settings.messenger_url %}
+  <a href="{{ site_settings.messenger_url }}" target="_blank" rel="noopener"
+     class="flex items-center justify-center w-14 h-14 rounded-full bg-[#0084FF] text-white shadow-card hover:scale-105 transition"
+     aria-label="Chat on Messenger">
+    {% icon "messenger" "w-7 h-7" %}
+  </a>
+  {% endif %}
+  <a href="{{ site_settings.whatsapp_number|whatsapp_link:'Hi Fly Future Education, I would like to know more about studying abroad.' }}"
+     target="_blank" rel="noopener"
+     class="flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-white shadow-card hover:scale-105 transition"
+     aria-label="Chat on WhatsApp">
+    {% icon "whatsapp" "w-7 h-7" %}
+  </a>
+</div>

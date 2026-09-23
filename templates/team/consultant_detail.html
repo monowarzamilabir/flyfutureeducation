@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+
+<section class="relative bg-brand-navy text-white py-16 lg:py-20 overflow-hidden">
+  <div class="absolute inset-0 opacity-[0.07]" style="background-image:repeating-linear-gradient(135deg,#fff 0 1px,transparent 1px 18px);"></div>
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="w-32 h-32 rounded-full mx-auto overflow-hidden bg-white/10 mb-5 ring-4 ring-white/20">
+      {% if consultant.photo %}
+        <img src="{{ consultant.photo.url }}" alt="{{ consultant.name }}" class="w-full h-full object-cover">
+      {% else %}
+        <div class="w-full h-full flex items-center justify-center text-4xl font-bold">{{ consultant.name|first }}</div>
+      {% endif %}
+    </div>
+    <h1 class="text-2xl md:text-3xl font-display font-semibold mb-1 text-white">{{ consultant.name }}</h1>
+    <p class="text-brand-gold font-semibold">{{ consultant.designation }}</p>
+  </div>
+</section>
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    {% if consultant.bio %}
+    <div class="prose max-w-none prose-headings:text-brand-navy prose-a:text-brand-blue mb-10">{{ consultant.bio|safe }}</div>
+    {% endif %}
+
+    <div class="card p-6 flex flex-wrap gap-6 items-center justify-between">
+      <div class="flex flex-wrap gap-6 text-sm">
+        {% if consultant.email %}
+        <a href="mailto:{{ consultant.email }}" class="flex items-center gap-2 font-semibold text-brand-navy hover:text-brand-blue">{% icon "mail" "w-5 h-5 text-brand-teal" %}{{ consultant.email }}</a>
+        {% endif %}
+        {% if consultant.phone %}
+        <a href="tel:{{ consultant.phone }}" class="flex items-center gap-2 font-semibold text-brand-navy hover:text-brand-blue">{% icon "phone" "w-5 h-5 text-brand-teal" %}{{ consultant.phone }}</a>
+        {% endif %}
+      </div>
+      <div class="flex gap-2">
+        {% if consultant.facebook_url %}<a href="{{ consultant.facebook_url }}" target="_blank" rel="noopener" class="p-2 rounded-full bg-brand-light text-brand-blue hover:bg-brand-blue hover:text-white transition">{% icon "facebook" "w-4 h-4" %}</a>{% endif %}
+        {% if consultant.linkedin_url %}<a href="{{ consultant.linkedin_url }}" target="_blank" rel="noopener" class="p-2 rounded-full bg-brand-light text-brand-blue hover:bg-brand-blue hover:text-white transition">{% icon "linkedin" "w-4 h-4" %}</a>{% endif %}
+      </div>
+    </div>
+
+    <div class="text-center mt-10">
+      <a href="{% url 'contact:contact' %}" class="btn-secondary">Book a Consultation {% icon "arrow-right" "w-4 h-4" %}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

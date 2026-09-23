@@ -1,0 +1,26 @@
+{% load core_extras %}
+<a href="{{ country.get_absolute_url }}" class="card group overflow-hidden flex flex-col hover:border-brand-navy/30 hover:shadow-card transition duration-200" data-filter-item data-filter-label="{{ country.name }}">
+  <div class="h-36 w-full bg-brand-navy relative overflow-hidden">
+    {% if country.hero_image %}
+      <img src="{{ country.hero_image.url }}" alt="Study in {{ country.name }}" class="h-full w-full object-cover group-hover:scale-105 transition duration-300">
+      <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/70 via-transparent to-transparent"></div>
+    {% else %}
+      <div class="h-full w-full flex items-center justify-center text-white/80">{% icon "globe" "w-12 h-12" %}</div>
+    {% endif %}
+    <span class="absolute top-3 left-3 inline-flex items-center gap-1.5 font-mono text-[11px] text-white bg-brand-navy/70 backdrop-blur px-2 py-1 rounded-[4px] border border-white/15">
+      DAC {% icon "plane" "w-3 h-3" %} {{ country.name|slice:":3"|upper }}
+    </span>
+    {% if country.flag_image %}
+    <img src="{{ country.flag_image.url }}" alt="{{ country.name }} flag" class="absolute bottom-3 left-3 h-7 w-7 rounded-full ring-2 ring-white object-cover shadow">
+    {% endif %}
+  </div>
+  <div class="ticket-tear"></div>
+  <div class="p-5 flex flex-col flex-1">
+    <h3 class="font-display font-semibold text-brand-navy mb-1">{{ country.name }}</h3>
+    {% if country.intake_seasons %}<p class="text-xs text-brand-teal font-medium mb-2">Intakes: {{ country.intake_seasons }}</p>{% endif %}
+    <p class="text-sm text-slate-500 leading-relaxed flex-1 line-clamp-3">{{ country.why_study_here|striptags|truncatewords:20 }}</p>
+    <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-navy">
+      Explore {{ country.name }} {% icon "arrow-right" "w-4 h-4" %}
+    </span>
+  </div>
+</a>

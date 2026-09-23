@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+{% include "partials/page_header.html" with eyebrow="About Fly Future Education" title="Empowering Dreams Through Global Education" subtitle="A Dhaka-based study-abroad consultancy built on honest advice and real results." %}
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-14 items-center mb-24">
+    <div>
+      <h2 class="section-title mb-5">Making global education accessible and honest</h2>
+      <p class="text-slate-500 leading-relaxed mb-4">
+        Fly Future Education was founded to close the gap between ambitious Bangladeshi students and the
+        world's universities. Too many students lose time, money, and confidence to misinformation and
+        unauthorized agents. We exist to be the opposite of that — a transparent, licensed consultancy that
+        tells students the truth about their options, even when that means recommending a different country,
+        program, or timeline than the one they first imagined.
+      </p>
+      <p class="text-slate-500 leading-relaxed mb-4">
+        Our counsellors handle university shortlisting, application filing, scholarship matching, visa
+        documentation, and pre-departure preparation as one connected process, not a series of handoffs. We
+        stay engaged with students well past their visa approval — through orientation, arrival, and their
+        first weeks abroad.
+      </p>
+      <p class="text-slate-500 leading-relaxed">
+        We proudly support industry efforts — including recent initiatives by regulatory bodies such as
+        FACD-CAB — to protect students from fraudulent consultancies and ensure only authorized agencies
+        represent students' interests abroad.
+      </p>
+    </div>
+    <div class="rounded-[10px] bg-brand-navy aspect-[4/3] flex items-center justify-center border border-dashed border-brand-navy/20 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-[0.07]" style="background-image:repeating-linear-gradient(135deg,#fff 0 1px,transparent 1px 22px);"></div>
+      {% icon "shield" "w-20 h-20 text-brand-gold-light relative" %}
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+    <h2 class="section-title mb-14">What makes us different</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for benefit in benefits %}
+      <div class="card p-6 flex gap-4">
+        <div class="w-11 h-11 shrink-0 rounded-[6px] bg-brand-navy/5 text-brand-navy flex items-center justify-center">{% icon benefit.icon|default:"shield" "w-5 h-5" %}</div>
+        <div>
+          <h3 class="font-display font-semibold text-brand-navy mb-1">{{ benefit.title }}</h3>
+          <p class="text-sm text-slate-500">{{ benefit.description }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if stats %}
+  <div class="bg-brand-navy text-white py-14 mb-24 border-y-2 border-dashed border-brand-navy/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+      {% for stat in stats %}
+      <div>
+        <p class="font-display text-4xl md:text-5xl font-semibold text-brand-gold-light"><span data-counter="{{ stat.value }}">0</span>{{ stat.suffix }}</p>
+        <p class="text-sm text-slate-300 mt-2">{{ stat.label }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="section-title mb-14">Our consultants</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {% for consultant in team %}{% include "partials/consultant_card.html" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

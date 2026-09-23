@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+{% include "partials/page_header.html" with eyebrow="Got Questions?" title="Frequently Asked Questions" subtitle="Answers to common questions about visas, admissions, and scholarships." %}
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    {% if categories %}
+      {% for category in categories %}
+      {% with faqs=category.faqs.all %}
+      {% if faqs %}
+      <div>
+        <h2 class="text-xl font-display font-semibold text-brand-navy mb-5">{{ category.name }}</h2>
+        <div class="space-y-3">
+          {% for faq in faqs %}
+          <div class="card overflow-hidden" data-faq-item data-open="false">
+            <button type="button" class="w-full flex items-center justify-between gap-4 text-left p-5 font-semibold text-brand-navy" data-faq-question>
+              <span>{{ faq.question }}</span>
+              <span class="shrink-0 text-brand-blue transition-transform duration-200" data-faq-icon>{% icon "chevron-down" "w-5 h-5" %}</span>
+            </button>
+            <div class="px-5 overflow-hidden transition-all duration-300" style="max-height:0;" data-faq-answer>
+              <div class="prose prose-sm max-w-none pb-5 text-slate-500">{{ faq.answer|safe }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      {% endwith %}
+      {% endfor %}
+    {% else %}
+    <p class="text-center text-slate-500 py-20">FAQs are coming soon.</p>
+    {% endif %}
+
+    <div class="text-center pt-6">
+      <p class="text-slate-500 mb-4">Still have questions?</p>
+      <a href="{% url 'contact:contact' %}" class="btn-secondary">Contact Us {% icon "arrow-right" "w-4 h-4" %}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

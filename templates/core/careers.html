@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load core_extras %}
+{% block content %}
+{% include "partials/page_header.html" with eyebrow="Join Our Team" title="Careers at Fly Future Education" subtitle="Help students build their futures — see our current openings." %}
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    {% if jobs %}
+    <div class="space-y-5">
+      {% for job in jobs %}
+      <a href="{% url 'core:career_detail' job.slug %}" class="card p-6 flex flex-wrap items-center justify-between gap-4 hover:shadow-lg transition">
+        <div>
+          <h3 class="font-display font-semibold text-brand-navy text-lg">{{ job.title }}</h3>
+          <p class="text-sm text-slate-500 mt-1">{{ job.department }} &middot; {{ job.location }} &middot; {{ job.get_employment_type_display }}</p>
+        </div>
+        <span class="btn-secondary !py-2 !px-5 text-sm">View &amp; Apply</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center text-slate-500 py-20">No open positions right now. Check back soon, or send your CV to <a href="mailto:{{ site_settings.email }}" class="text-brand-blue font-semibold">{{ site_settings.email }}</a>.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
