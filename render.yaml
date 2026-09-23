@@ -25,6 +25,13 @@
 #     name: flyfuture-media
 #     mountPath: /opt/render/project/src/media
 #     sizeGB: 1
+#
+# IMPORTANT: the startCommand below runs `flush --noinput` on every boot,
+# wiping the entire database, to guarantee demo images survive a restart
+# on a disk-less free plan. This destroys any real Apply Now / Contact
+# submissions received during the demo phase. Remove the `flush` step
+# (and the `seed_sample_data` call, if you no longer want sample content)
+# before treating this as a real production deployment.
 
 databases:
   - name: flyfuture-db
@@ -39,7 +46,7 @@ services:
     plan: free
     region: singapore
     buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
-    startCommand: "python manage.py migrate --noinput && python manage.py seed_sample_data && (python manage.py createsuperuser --noinput || true) && gunicorn flyfuture.wsgi:application"
+    startCommand: "python manage.py migrate --noinput && python manage.py flush --noinput && python manage.py seed_sample_data && (python manage.py createsuperuser --noinput || true) && gunicorn flyfuture.wsgi:application"
     envVars:
       - key: SECRET_KEY
         generateValue: true
