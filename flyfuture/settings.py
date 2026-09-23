@@ -222,6 +222,11 @@ LOGOUT_REDIRECT_URL = "/"
 # Security hardening (auto-enabled when DEBUG=False)
 # ------------------------------------------------------------------
 if not DEBUG:
+    # Railway (and most PaaS proxies) terminate TLS at the edge and forward
+    # plain HTTP to gunicorn, so without this Django can't tell the request
+    # was actually HTTPS and redirects to HTTPS again on every request —
+    # an infinite redirect loop.
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=True)
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
