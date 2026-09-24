@@ -1,91 +1,82 @@
 {% extends "base.html" %}
 {% load static core_extras %}
 
+{% block extra_head %}
+<link rel="preload" as="image" imagesrcset="{% static 'img/hero/hero-graduates-960.jpg' %} 960w, {% static 'img/hero/hero-graduates-1920.jpg' %} 1920w" imagesizes="100vw">
+{% endblock %}
+
 {% block content %}
 
-{# ============================= HERO — the boarding pass ============================= #}
-<section class="relative bg-brand-navy text-white overflow-hidden" data-hero-slider>
-  <div class="absolute inset-0 opacity-[0.06]" style="background-image:repeating-linear-gradient(135deg,#fff 0 1px,transparent 1px 22px);"></div>
+{# ============================= HERO — one photo per slide ============================= #}
+<section class="hero relative overflow-hidden bg-brand-navy text-white" data-hero aria-roledescription="carousel" aria-label="Highlights">
+  <div class="absolute inset-0" aria-hidden="true">
+    <div class="hero-photo" data-hero-photo>
+      <div class="hero-photo-inner">
+        <img src="{% static 'img/hero/hero-graduates-1920.jpg' %}" srcset="{% static 'img/hero/hero-graduates-960.jpg' %} 960w, {% static 'img/hero/hero-graduates-1920.jpg' %} 1920w" sizes="100vw" alt="" fetchpriority="high" style="object-position: 62% center">
+      </div>
+    </div>
+    <div class="hero-photo" data-hero-photo>
+      <div class="hero-photo-inner">
+        <img src="{% static 'img/hero/hero-library-1920.jpg' %}" srcset="{% static 'img/hero/hero-library-960.jpg' %} 960w, {% static 'img/hero/hero-library-1920.jpg' %} 1920w" sizes="100vw" alt="" style="object-position: 55% center">
+      </div>
+    </div>
+    <div class="hero-photo" data-hero-photo>
+      <div class="hero-photo-inner">
+        <img src="{% static 'img/hero/hero-departure-1920.jpg' %}" srcset="{% static 'img/hero/hero-departure-960.jpg' %} 960w, {% static 'img/hero/hero-departure-1920.jpg' %} 1920w" sizes="100vw" alt="" style="object-position: 58% center">
+      </div>
+    </div>
+    <div class="absolute inset-0 z-[3] bg-gradient-to-r from-brand-navy/95 via-brand-navy/65 to-brand-navy/5"></div>
+    <div class="absolute inset-0 z-[3] bg-gradient-to-t from-brand-navy via-brand-navy/10 to-brand-navy/40"></div>
+  </div>
 
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 lg:pt-20">
-    <div class="grid lg:grid-cols-[1fr_300px] border border-white/15 rounded-t-[10px] overflow-hidden">
-
-      {# main stub #}
-      <div class="relative min-h-[400px] flex flex-col justify-center p-8 sm:p-12 lg:p-14 border-b-2 lg:border-b-0 lg:border-r-2 border-dashed border-white/20">
-        <div class="relative">
-          <div data-hero-slide class="transition-opacity duration-700 opacity-100">
-            <p class="font-mono text-xs tracking-wide text-brand-gold-light mb-5">DAC &#8594; ANYWHERE &nbsp;&middot;&nbsp; STUDY VISA MANIFEST</p>
-            <h1 class="font-display text-4xl md:text-5xl font-semibold leading-[1.05] mb-5 max-w-xl text-white">{{ site_settings.tagline }}</h1>
-            <p class="text-slate-300 text-lg mb-8 max-w-xl leading-relaxed">Fly Future Education guides Bangladeshi students end-to-end — admissions, visas, scholarships and test prep — for study destinations across Europe, North America, Australia and Asia.</p>
-            <div class="flex flex-wrap gap-4">
-              <a href="{% url 'applications:apply' %}" class="btn-primary">Apply now</a>
-              <a href="{% url 'contact:contact' %}" class="btn-outline">Free consultation</a>
-            </div>
-          </div>
-
-          <div data-hero-slide class="absolute inset-0 transition-opacity duration-700 opacity-0 pointer-events-none">
-            <p class="font-mono text-xs tracking-wide text-brand-gold-light mb-5">SCHOLARSHIPS &amp; FEE WAIVERS</p>
-            <h1 class="font-display text-4xl md:text-5xl font-semibold leading-[1.05] mb-5 max-w-xl text-white">Turn your ambition into a fully-funded degree</h1>
-            <p class="text-slate-300 text-lg mb-8 max-w-xl leading-relaxed">We match students with scholarships and tuition waivers across our partner universities, and handle the paperwork from application to award letter.</p>
-            <div class="flex flex-wrap gap-4">
-              <a href="{% url 'scholarships:list' %}" class="btn-primary">Browse scholarships</a>
-              <a href="{% url 'contact:contact' %}" class="btn-outline">Talk to a counsellor</a>
-            </div>
-          </div>
-
-          <div data-hero-slide class="absolute inset-0 transition-opacity duration-700 opacity-0 pointer-events-none">
-            <p class="font-mono text-xs tracking-wide text-brand-gold-light mb-5">VISA &amp; DOCUMENTATION</p>
-            <h1 class="font-display text-4xl md:text-5xl font-semibold leading-[1.05] mb-5 max-w-xl text-white">A high visa success rate, built on honest advice</h1>
-            <p class="text-slate-300 text-lg mb-8 max-w-xl leading-relaxed">From bank statements to embassy interviews, our licensed counsellors prepare every document so you can apply with confidence.</p>
-            <div class="flex flex-wrap gap-4">
-              <a href="{% url 'services:list' %}" class="btn-primary">Our visa services</a>
-              <a href="{% url 'core:faq' %}" class="btn-outline">Visa FAQs</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex gap-2 mt-10 relative">
-          <button type="button" aria-label="Slide 1" data-hero-dot class="h-1.5 w-8 rounded-full bg-brand-gold transition-all"></button>
-          <button type="button" aria-label="Slide 2" data-hero-dot class="h-1.5 w-2.5 rounded-full bg-white/50 transition-all"></button>
-          <button type="button" aria-label="Slide 3" data-hero-dot class="h-1.5 w-2.5 rounded-full bg-white/50 transition-all"></button>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 lg:pt-32 lg:pb-10 min-h-[680px] lg:min-h-[calc(100svh-5rem)] flex flex-col justify-end">
+    <div class="hero-copies max-w-3xl" data-hero-live aria-live="off">
+      <div class="hero-copy" data-hero-copy role="group" aria-roledescription="slide" aria-label="1 of 3">
+        <h1 class="font-display text-[2.75rem] sm:text-6xl lg:text-7xl font-semibold leading-[1.02] tracking-tight text-white" data-split>{{ site_settings.tagline }}</h1>
+        <p class="hero-rise mt-6 text-lg text-slate-200 max-w-xl leading-relaxed" style="--d: 700ms">Fly Future Education guides Bangladeshi students end-to-end — admissions, visas, scholarships and test prep — for study destinations across Europe, North America, Australia and Asia.</p>
+        <div class="hero-rise mt-8 flex flex-wrap gap-4" style="--d: 830ms">
+          <a href="{% url 'applications:apply' %}" class="btn-primary">Apply now</a>
+          <a href="{% url 'contact:contact' %}" class="btn-outline">Free consultation</a>
         </div>
       </div>
 
-      {# route stub #}
-      <div class="hidden lg:flex flex-col justify-between p-10 bg-white/[0.03]">
-        <div>
-          <p class="font-mono text-[11px] tracking-[0.2em] text-white/45 mb-6">BOARDING PASS</p>
-          <div class="flex items-center justify-between mb-1">
-            <span class="font-display text-3xl font-semibold">DAC</span>
-            <span class="text-brand-gold-light">{% icon "plane" "w-5 h-5" %}</span>
-            <span class="font-display text-3xl font-semibold">{% firstof destinations.0.name|slice:":3"|upper "YOU" %}</span>
-          </div>
-          <div class="flex items-center justify-between text-[11px] font-mono text-white/45 mb-8">
-            <span>DHAKA</span>
-            <span>{% firstof destinations.0.name "YOUR FUTURE" %}</span>
-          </div>
-          <dl class="space-y-3 font-mono text-xs text-white/70">
-            <div class="flex justify-between"><dt>PASSENGER</dt><dd class="text-white">YOU</dd></div>
-            <div class="flex justify-between"><dt>SERVICE</dt><dd class="text-white">FULLY GUIDED</dd></div>
-            <div class="flex justify-between"><dt>STATUS</dt><dd class="text-brand-gold-light">CONFIRMED</dd></div>
-          </dl>
+      <div class="hero-copy" data-hero-copy role="group" aria-roledescription="slide" aria-label="2 of 3">
+        <h2 class="font-display text-[2.75rem] sm:text-6xl lg:text-7xl font-semibold leading-[1.02] tracking-tight text-white" data-split>Turn your ambition into a fully-funded degree</h2>
+        <p class="hero-rise mt-6 text-lg text-slate-200 max-w-xl leading-relaxed" style="--d: 700ms">We match students with scholarships and tuition waivers across our partner universities, and handle the paperwork from application to award letter.</p>
+        <div class="hero-rise mt-8 flex flex-wrap gap-4" style="--d: 830ms">
+          <a href="{% url 'scholarships:list' %}" class="btn-primary">Browse scholarships</a>
+          <a href="{% url 'contact:contact' %}" class="btn-outline">Talk to a counsellor</a>
         </div>
-        <div class="pt-6 mt-6 border-t-2 border-dashed border-white/20">
-          <p class="text-[11px] font-mono text-white/45 mb-3">POPULAR ROUTES</p>
-          <div class="flex -space-x-2">
-            {% for c in destinations|slice:":6" %}
-            <span class="w-9 h-9 rounded-full ring-2 ring-brand-navy overflow-hidden bg-white/10 flex items-center justify-center text-[10px] font-bold" title="{{ c.name }}">
-              {% if c.flag_image %}<img src="{{ c.flag_image.url }}" class="w-full h-full object-cover" alt="{{ c.name }}">{% else %}{{ c.name|slice:":2" }}{% endif %}
-            </span>
-            {% endfor %}
-          </div>
+      </div>
+
+      <div class="hero-copy" data-hero-copy role="group" aria-roledescription="slide" aria-label="3 of 3">
+        <h2 class="font-display text-[2.75rem] sm:text-6xl lg:text-7xl font-semibold leading-[1.02] tracking-tight text-white" data-split>A high visa success rate, built on honest advice</h2>
+        <p class="hero-rise mt-6 text-lg text-slate-200 max-w-xl leading-relaxed" style="--d: 700ms">From bank statements to embassy interviews, our licensed counsellors prepare every document so you can apply with confidence.</p>
+        <div class="hero-rise mt-8 flex flex-wrap gap-4" style="--d: 830ms">
+          <a href="{% url 'services:list' %}" class="btn-primary">Our visa services</a>
+          <a href="{% url 'core:faq' %}" class="btn-outline">Visa FAQs</a>
         </div>
       </div>
     </div>
 
-    <div class="h-3 border border-t-0 border-white/15 rounded-b-[10px] bg-perf-h" style="background-size: 18px 100%; background-position: center;"></div>
+    <div class="mt-12 lg:mt-16 pt-6 border-t border-white/15 flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10">
+      <ul class="flex-1 flex flex-wrap gap-x-8 gap-y-3">
+        <li class="flex items-center gap-2 text-sm font-semibold"><span class="text-brand-gold-light">{% icon "check-circle" "w-5 h-5" %}</span>Licensed &amp; authorized</li>
+        <li class="flex items-center gap-2 text-sm font-semibold"><span class="text-brand-gold-light">{% icon "check-circle" "w-5 h-5" %}</span>High visa success rate</li>
+        <li class="flex items-center gap-2 text-sm font-semibold"><span class="text-brand-gold-light">{% icon "check-circle" "w-5 h-5" %}</span>Free profile assessment</li>
+      </ul>
+
+      <div class="flex items-center gap-4">
+        <p class="font-display text-sm tabular-nums text-white/60"><span class="text-white" data-hero-current>01</span> / 03</p>
+        <div class="hero-progress w-20 sm:w-28"><span data-hero-progress></span></div>
+        <div class="flex gap-2">
+          <button type="button" data-hero-prev aria-label="Previous slide" class="w-11 h-11 inline-flex items-center justify-center rounded-[4px] border border-white/25 hover:bg-white hover:text-brand-navy transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold-light">{% icon "arrow-left" "w-4 h-4" %}</button>
+          <button type="button" data-hero-next aria-label="Next slide" class="w-11 h-11 inline-flex items-center justify-center rounded-[4px] border border-white/25 hover:bg-white hover:text-brand-navy transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold-light">{% icon "arrow-right" "w-4 h-4" %}</button>
+          <button type="button" data-hero-toggle aria-label="Pause slideshow" aria-pressed="false" class="w-11 h-11 inline-flex items-center justify-center rounded-[4px] border border-white/25 hover:bg-white hover:text-brand-navy transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold-light"><span data-icon-pause class="inline-flex">{% icon "pause" "w-4 h-4" %}</span><span data-icon-play>{% icon "play" "w-4 h-4" %}</span></button>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="h-14 lg:h-20"></div>
 </section>
 
 {# ============================= ABOUT ============================= #}

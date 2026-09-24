@@ -3,12 +3,8 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
 
     <div>
-      <a href="{% url 'core:home' %}" class="flex items-center gap-3 mb-4">
-        <img src="{% if site_settings.logo %}{{ site_settings.logo.url }}{% else %}{% static 'img/brand/logo.png' %}{% endif %}" alt="{{ site_settings.site_name }} logo" class="h-11 w-11 rounded-full object-cover">
-        <span class="leading-tight">
-          <span class="block font-display font-semibold text-white text-lg -mb-0.5">Fly Future</span>
-          <span class="block font-mono text-[10px] tracking-[0.2em] text-brand-gold-light">EDUCATION</span>
-        </span>
+      <a href="{% url 'core:home' %}" class="inline-block mb-5">
+        <img src="{% static 'img/brand/logo-horizontal.png' %}" alt="{{ site_settings.site_name }}" width="710" height="176" loading="lazy" class="h-12 w-auto">
       </a>
       <p class="text-sm text-slate-400 leading-relaxed mb-4">
         {{ site_settings.about_short|default:"Fly Future Education helps Bangladeshi students study abroad with expert visa processing, admissions, and scholarship guidance." }}

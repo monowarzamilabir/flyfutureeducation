@@ -80,3 +80,330 @@
     overflow: hidden;
   }
 }
+
+/* Motion system. Unlayered so JS-toggled state classes are never purged. */
+:root {
+  --ease-out: cubic-bezier(0.2, 0.75, 0.1, 1);
+  --ease-curtain: cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+/* ---- Hero carousel: each slide has its own photo; the next one wipes in over the last ---- */
+.hero {
+  --hero-duration: 7s;
+  --mx: 0;
+  --my: 0;
+}
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  clip-path: inset(0 0 0 100%);
+  z-index: 0;
+}
+.hero-photo.is-active {
+  clip-path: inset(0);
+  z-index: 2;
+  transition: clip-path 1.25s var(--ease-curtain);
+}
+.hero-photo.is-leaving {
+  clip-path: inset(0);
+  z-index: 1;
+}
+.hero-photo-inner {
+  position: absolute;
+  inset: -3%;
+  transform: translate3d(calc(var(--mx) * -1.4%), calc(var(--my) * -1.4%), 0);
+}
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.14);
+  transition: transform 1.2s ease;
+}
+.hero-photo.is-active img {
+  transform: scale(1.02);
+  transition: transform calc(var(--hero-duration) + 1.5s) cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+html:not(.js) .hero-photo:first-child {
+  clip-path: none;
+}
+
+.hero-copies {
+  display: grid;
+}
+.hero-copy {
+  grid-area: 1 / 1;
+  visibility: hidden;
+}
+.hero-copy.is-active,
+.hero-copy.is-leaving,
+html:not(.js) .hero-copy:first-child {
+  visibility: visible;
+}
+.hero-copy.is-leaving {
+  pointer-events: none;
+}
+.split-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.split-word > span {
+  display: inline-block;
+  transform: translate3d(0, 110%, 0);
+}
+.hero-copy.is-active .split-word > span {
+  transform: none;
+  transition: transform 1s var(--ease-out) calc(var(--i, 0) * 55ms + 380ms);
+}
+.hero-copy.is-leaving .split-word > span {
+  transform: translate3d(0, -110%, 0);
+  transition: transform 0.5s cubic-bezier(0.6, 0, 0.8, 0.4) calc(var(--i, 0) * 15ms);
+}
+.hero-rise {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+}
+.hero-copy.is-active .hero-rise,
+html:not(.js) .hero-copy:first-child .hero-rise {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.9s ease var(--d, 700ms), transform 1s var(--ease-out) var(--d, 700ms);
+}
+.hero-copy.is-leaving .hero-rise {
+  opacity: 0;
+  transform: translate3d(0, -12px, 0);
+  transition: opacity 0.35s ease, transform 0.4s ease;
+}
+
+.hero-progress {
+  height: 2px;
+  background: rgb(255 255 255 / 0.2);
+  overflow: hidden;
+}
+.hero-progress > span {
+  display: block;
+  height: 100%;
+  background: #d9ae5c;
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+.hero-progress > span.is-running {
+  animation: hero-progress var(--hero-duration) linear forwards;
+}
+.hero.is-paused .hero-progress > span {
+  animation-play-state: paused;
+}
+@keyframes hero-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+.hero [data-icon-play],
+.hero.is-stopped [data-icon-pause] {
+  display: none;
+}
+.hero.is-stopped [data-icon-play] {
+  display: inline-flex;
+}
+
+/* ---- Trailing cursor (fine pointers only; created by main.js) ---- */
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 9999px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.has-cursor .cursor-dot,
+.has-cursor .cursor-ring {
+  opacity: 1;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: #b8862f;
+}
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
+  border: 1.5px solid rgb(184 134 47 / 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease, width 0.4s var(--ease-out), height 0.4s var(--ease-out), margin 0.4s var(--ease-out),
+    background-color 0.3s ease, border-color 0.3s ease;
+}
+.cursor-ring.is-hover {
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  background-color: rgb(184 134 47 / 0.14);
+}
+.cursor-ring.is-label {
+  width: 84px;
+  height: 84px;
+  margin: -42px 0 0 -42px;
+  background-color: #b8862f;
+  border-color: #b8862f;
+}
+.cursor-label {
+  font: 600 12px/1 "IBM Plex Sans", sans-serif;
+  color: #101b3d;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.25s ease, transform 0.35s var(--ease-out);
+}
+.cursor-ring.is-label .cursor-label {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- Photos that drift with the cursor inside a card ---- */
+.photo-drift {
+  translate: calc(var(--px, 0) * -8px) calc(var(--py, 0) * -6px);
+  transition: translate 0.6s var(--ease-out), transform 0.7s var(--ease-out);
+}
+
+/* ---- Service card: photo band that opens to fill the card ---- */
+.svc-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  isolation: isolate;
+}
+.svc-media {
+  position: absolute;
+  inset: 0;
+  background: #101b3d;
+  clip-path: inset(0 0 calc(100% - 11rem) 0);
+  transition: clip-path 0.75s var(--ease-curtain);
+}
+.svc-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  transform: scale(1.1);
+}
+.svc-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(16 27 61 / 0.96) 20%, rgb(16 27 61 / 0.6) 60%, rgb(16 27 61 / 0.2));
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.svc-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: calc(11rem - 1.375rem) 1.5rem 1.5rem;
+}
+.svc-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #101b3d;
+  box-shadow: 0 6px 16px -8px rgb(16 27 61 / 0.5);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+.svc-title {
+  color: #101b3d;
+  transition: color 0.4s ease;
+}
+.svc-desc {
+  color: #64748b;
+  transition: color 0.4s ease;
+}
+.svc-link {
+  color: #101b3d;
+  transition: color 0.4s ease;
+}
+.svc-card:focus-visible {
+  outline: 2px solid #b8862f;
+  outline-offset: 3px;
+}
+@media (hover: hover) {
+  .svc-card:hover .svc-media {
+    clip-path: inset(0);
+  }
+  .svc-card:hover .svc-media img {
+    transform: scale(1.04);
+  }
+  .svc-card:hover .svc-shade {
+    opacity: 1;
+  }
+  .svc-card:hover .svc-icon {
+    background: #b8862f;
+    color: #101b3d;
+  }
+  .svc-card:hover .svc-title,
+  .svc-card:hover .svc-link {
+    color: #fff;
+  }
+  .svc-card:hover .svc-desc {
+    color: rgb(255 255 255 / 0.82);
+  }
+}
+.svc-card:focus-visible .svc-media {
+  clip-path: inset(0);
+}
+.svc-card:focus-visible .svc-shade {
+  opacity: 1;
+}
+.svc-card:focus-visible .svc-title,
+.svc-card:focus-visible .svc-link {
+  color: #fff;
+}
+.svc-card:focus-visible .svc-desc {
+  color: rgb(255 255 255 / 0.82);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-photo.is-active,
+  .hero-photo img,
+  .hero-photo.is-active img,
+  .svc-media,
+  .photo-drift {
+    transition: none;
+  }
+  .hero-photo img,
+  .hero-photo.is-active img {
+    transform: none;
+  }
+  .hero-photo-inner {
+    transform: none;
+  }
+  .split-word > span,
+  .hero-copy.is-active .split-word > span,
+  .hero-copy.is-leaving .split-word > span {
+    transform: none;
+    transition: none;
+  }
+  .hero-rise,
+  .hero-copy.is-active .hero-rise {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

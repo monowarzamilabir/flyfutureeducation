@@ -1,11 +1,13 @@
 {% load core_extras %}
-<a href="{{ service.get_absolute_url }}" class="card group flex flex-col p-6 hover:border-brand-navy/30 hover:shadow-card transition duration-200">
-  <div class="w-11 h-11 rounded-[6px] bg-brand-navy/5 text-brand-navy flex items-center justify-center mb-5 group-hover:bg-brand-navy group-hover:text-white transition">
-    {% icon service.icon|default:"document" "w-5 h-5" %}
+<a href="{{ service.get_absolute_url }}" class="svc-card group" data-cursor="View" data-drift>
+  <div class="svc-media" aria-hidden="true">
+    {% if service.image %}<img src="{{ service.image.url }}" alt="" loading="lazy" decoding="async" class="photo-drift">{% endif %}
+    <div class="svc-shade"></div>
   </div>
-  <h3 class="font-display font-semibold text-brand-navy mb-2">{{ service.title }}</h3>
-  <p class="text-sm text-slate-500 leading-relaxed flex-1">{{ service.short_description }}</p>
-  <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-navy">
-    Learn more {% icon "arrow-right" "w-4 h-4" %}
-  </span>
+  <div class="svc-body">
+    <div class="svc-icon">{% icon service.icon|default:"document" "w-5 h-5" %}</div>
+    <h3 class="svc-title font-display font-semibold text-lg mt-5 mb-2">{{ service.title }}</h3>
+    <p class="svc-desc text-sm leading-relaxed flex-1">{{ service.short_description }}</p>
+    <span class="svc-link mt-5 inline-flex items-center gap-1.5 text-sm font-semibold">Learn more {% icon "arrow-right" "w-4 h-4" %}</span>
+  </div>
 </a>

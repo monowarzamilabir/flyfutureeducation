@@ -1,8 +1,8 @@
 {% load core_extras %}
-<a href="{{ post.get_absolute_url }}" class="card group overflow-hidden flex flex-col hover:border-brand-navy/30 hover:shadow-card transition duration-200">
+<a href="{{ post.get_absolute_url }}" class="card group overflow-hidden flex flex-col hover:border-brand-navy/30 hover:shadow-card transition duration-200" data-cursor="Read" data-drift>
   <div class="h-40 bg-brand-navy overflow-hidden">
     {% if post.cover_image %}
-      <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" class="h-full w-full object-cover group-hover:scale-105 transition duration-300">
+      <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" loading="lazy" decoding="async" class="photo-drift h-full w-full object-cover group-hover:scale-105">
     {% else %}
       <div class="h-full w-full flex items-center justify-center text-white/70">{% icon "book-open" "w-10 h-10" %}</div>
     {% endif %}

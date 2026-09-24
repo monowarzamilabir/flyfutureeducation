@@ -3,19 +3,11 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
 
-      <a href="{% url 'core:home' %}" class="flex items-center gap-3 shrink-0">
-        {% if site_settings.logo %}
-          <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }} logo" class="h-11 w-11 rounded-full object-cover">
-        {% else %}
-          <img src="{% static 'img/brand/logo.png' %}" alt="{{ site_settings.site_name }} logo" class="h-11 w-11 rounded-full object-cover">
-        {% endif %}
-        <span class="leading-tight">
-          <span class="block font-display font-semibold text-brand-navy text-lg -mb-0.5">Fly Future</span>
-          <span class="block font-mono text-[10px] tracking-[0.2em] text-brand-gold">EDUCATION</span>
-        </span>
+      <a href="{% url 'core:home' %}" class="shrink-0">
+        <img src="{% static 'img/brand/logo-horizontal.png' %}" alt="{{ site_settings.site_name }}" width="710" height="176" class="h-10 xl:h-11 w-auto">
       </a>
 
-      <nav class="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-medium text-brand-navy/80 whitespace-nowrap">
+      <nav class="hidden lg:flex items-center gap-3 xl:gap-6 text-sm font-medium text-brand-navy/80 whitespace-nowrap">
         <a href="{% url 'core:home' %}" class="hover:text-brand-navy hover:underline decoration-brand-gold decoration-2 underline-offset-[6px] transition">Home</a>
         <a href="{% url 'core:about' %}" class="hover:text-brand-navy hover:underline decoration-brand-gold decoration-2 underline-offset-[6px] transition">About</a>
         <a href="{% url 'services:list' %}" class="hover:text-brand-navy hover:underline decoration-brand-gold decoration-2 underline-offset-[6px] transition">Services</a>

@@ -1,8 +1,8 @@
 {% load core_extras %}
-<a href="{{ country.get_absolute_url }}" class="card group overflow-hidden flex flex-col hover:border-brand-navy/30 hover:shadow-card transition duration-200" data-filter-item data-filter-label="{{ country.name }}">
+<a href="{{ country.get_absolute_url }}" class="card group overflow-hidden flex flex-col hover:border-brand-navy/30 hover:shadow-card transition duration-200" data-filter-item data-filter-label="{{ country.name }}" data-cursor="Explore" data-drift>
   <div class="h-36 w-full bg-brand-navy relative overflow-hidden">
     {% if country.hero_image %}
-      <img src="{{ country.hero_image.url }}" alt="Study in {{ country.name }}" class="h-full w-full object-cover group-hover:scale-105 transition duration-300">
+      <img src="{{ country.hero_image.url }}" alt="Study in {{ country.name }}" loading="lazy" decoding="async" class="photo-drift h-full w-full object-cover group-hover:scale-105">
       <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/70 via-transparent to-transparent"></div>
     {% else %}
       <div class="h-full w-full flex items-center justify-center text-white/80">{% icon "globe" "w-12 h-12" %}</div>

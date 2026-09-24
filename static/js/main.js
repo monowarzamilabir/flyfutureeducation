@@ -52,47 +52,211 @@
     });
   });
 
-  // ---------------------------------------------------------------
-  // Hero slider (auto-rotating fade slides)
-  // ---------------------------------------------------------------
-  const slider = document.querySelector("[data-hero-slider]");
-  if (slider) {
-    const slides = Array.from(slider.querySelectorAll("[data-hero-slide]"));
-    const dots = Array.from(slider.querySelectorAll("[data-hero-dot]"));
-    let current = 0;
-    let timer = null;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-    function goTo(index) {
-      slides.forEach(function (slide, i) {
-        slide.classList.toggle("opacity-100", i === index);
-        slide.classList.toggle("opacity-0", i !== index);
-        slide.classList.toggle("pointer-events-none", i !== index);
-      });
-      dots.forEach(function (dot, i) {
-        dot.classList.toggle("bg-brand-gold", i === index);
-        dot.classList.toggle("w-8", i === index);
-        dot.classList.toggle("bg-white/50", i !== index);
-        dot.classList.toggle("w-2.5", i !== index);
-      });
-      current = index;
-    }
-    function next() {
-      goTo((current + 1) % slides.length);
-    }
-    function restart() {
-      clearInterval(timer);
-      timer = setInterval(next, 6000);
-    }
-    dots.forEach(function (dot, i) {
-      dot.addEventListener("click", function () {
-        goTo(i);
-        restart();
-      });
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
-    if (slides.length > 1) {
-      goTo(0);
-      restart();
+  }
+
+  // ---------------------------------------------------------------
+  // Hero carousel: photo wipes in per slide, headline rises word by word
+  // ---------------------------------------------------------------
+  const hero = document.querySelector("[data-hero]");
+  if (hero) {
+    const photos = Array.from(hero.querySelectorAll("[data-hero-photo]"));
+    const copies = Array.from(hero.querySelectorAll("[data-hero-copy]"));
+    const progress = hero.querySelector("[data-hero-progress]");
+    const counter = hero.querySelector("[data-hero-current]");
+    const toggle = hero.querySelector("[data-hero-toggle]");
+    const live = hero.querySelector("[data-hero-live]");
+    let current = -1;
+    let userPaused = reduceMotion;
+    let focusHold = false;
+
+    hero.querySelectorAll("[data-split]").forEach(function (el) {
+      const text = el.textContent.trim();
+      el.setAttribute("aria-label", text);
+      el.innerHTML = text
+        .split(/\s+/)
+        .map(function (word, i) {
+          return '<span class="split-word" aria-hidden="true"><span style="--i:' + i + '">' + escapeHtml(word) + "</span></span>";
+        })
+        .join(" ");
+    });
+
+    function syncPaused() {
+      hero.classList.toggle("is-paused", userPaused || focusHold || document.hidden);
+      hero.classList.toggle("is-stopped", userPaused);
+      if (toggle) {
+        toggle.setAttribute("aria-label", userPaused ? "Play slideshow" : "Pause slideshow");
+        toggle.setAttribute("aria-pressed", String(userPaused));
+      }
+      if (live) live.setAttribute("aria-live", userPaused ? "polite" : "off");
     }
+
+    function restartProgress() {
+      if (!progress) return;
+      progress.classList.remove("is-running");
+      void progress.offsetWidth;
+      progress.classList.add("is-running");
+    }
+
+    function goTo(index, dir) {
+      const next = (index + photos.length) % photos.length;
+      if (next === current) return;
+      const prev = current;
+      current = next;
+
+      if (prev >= 0) {
+        const oldPhoto = photos[prev];
+        const oldCopy = copies[prev];
+        oldPhoto.classList.remove("is-active");
+        oldPhoto.classList.add("is-leaving");
+        oldCopy.classList.remove("is-active");
+        oldCopy.classList.add("is-leaving");
+        setTimeout(function () {
+          oldPhoto.classList.remove("is-leaving");
+        }, reduceMotion ? 0 : 1300);
+        setTimeout(function () {
+          oldCopy.classList.remove("is-leaving");
+        }, reduceMotion ? 0 : 600);
+      }
+
+      const photo = photos[current];
+      photo.classList.remove("is-leaving");
+      photo.style.transition = "none";
+      photo.style.clipPath = dir < 0 ? "inset(0 100% 0 0)" : "inset(0 0 0 100%)";
+      void photo.offsetWidth;
+      photo.style.transition = "";
+      photo.style.clipPath = "";
+      photo.classList.add("is-active");
+
+      copies[current].classList.remove("is-leaving");
+      copies[current].classList.add("is-active");
+      if (counter) counter.textContent = String(current + 1).padStart(2, "0");
+      restartProgress();
+    }
+
+    progress &&
+      progress.addEventListener("animationend", function () {
+        goTo(current + 1, 1);
+      });
+    hero.querySelector("[data-hero-next]").addEventListener("click", function () {
+      goTo(current + 1, 1);
+    });
+    hero.querySelector("[data-hero-prev]").addEventListener("click", function () {
+      goTo(current - 1, -1);
+    });
+    toggle &&
+      toggle.addEventListener("click", function () {
+        userPaused = !userPaused;
+        syncPaused();
+      });
+    hero.addEventListener("focusin", function () {
+      focusHold = true;
+      syncPaused();
+    });
+    hero.addEventListener("focusout", function (e) {
+      if (hero.contains(e.relatedTarget)) return;
+      focusHold = false;
+      syncPaused();
+    });
+    document.addEventListener("visibilitychange", syncPaused);
+
+    let touchX = null;
+    hero.addEventListener("touchstart", function (e) {
+      touchX = e.touches[0].clientX;
+    }, { passive: true });
+    hero.addEventListener("touchend", function (e) {
+      if (touchX === null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      touchX = null;
+      if (Math.abs(dx) > 50) dx < 0 ? goTo(current + 1, 1) : goTo(current - 1, -1);
+    }, { passive: true });
+
+    if (finePointer && !reduceMotion) {
+      let tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
+      function drift() {
+        cx += (tx - cx) * 0.06;
+        cy += (ty - cy) * 0.06;
+        hero.style.setProperty("--mx", cx.toFixed(4));
+        hero.style.setProperty("--my", cy.toFixed(4));
+        raf = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.001 ? requestAnimationFrame(drift) : null;
+      }
+      hero.addEventListener("pointermove", function (e) {
+        const r = hero.getBoundingClientRect();
+        tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+        ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        if (!raf) raf = requestAnimationFrame(drift);
+      });
+      hero.addEventListener("pointerleave", function () {
+        tx = ty = 0;
+        if (!raf) raf = requestAnimationFrame(drift);
+      });
+    }
+
+    syncPaused();
+    goTo(0, 1);
+  }
+
+  // ---------------------------------------------------------------
+  // Trailing cursor + card photos that drift with the pointer
+  // ---------------------------------------------------------------
+  if (finePointer && !reduceMotion) {
+    const ring = document.createElement("div");
+    const dot = document.createElement("div");
+    const label = document.createElement("span");
+    ring.className = "cursor-ring";
+    dot.className = "cursor-dot";
+    label.className = "cursor-label";
+    ring.setAttribute("aria-hidden", "true");
+    dot.setAttribute("aria-hidden", "true");
+    ring.appendChild(label);
+    document.body.append(ring, dot);
+
+    let x = -100, y = -100, rx = -100, ry = -100, raf = null;
+    function follow() {
+      rx += (x - rx) * 0.18;
+      ry += (y - ry) * 0.18;
+      ring.style.transform = "translate3d(" + rx + "px," + ry + "px,0)";
+      raf = Math.abs(x - rx) + Math.abs(y - ry) > 0.2 ? requestAnimationFrame(follow) : null;
+    }
+    document.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse") return;
+      x = e.clientX;
+      y = e.clientY;
+      dot.style.transform = "translate3d(" + x + "px," + y + "px,0)";
+      document.documentElement.classList.add("has-cursor");
+      if (!raf) raf = requestAnimationFrame(follow);
+    }, { passive: true });
+    document.documentElement.addEventListener("mouseleave", function () {
+      document.documentElement.classList.remove("has-cursor");
+    });
+    document.addEventListener("pointerover", function (e) {
+      const labelled = e.target.closest("[data-cursor]");
+      const interactive = e.target.closest("a, button, select, label[for], [role='button']");
+      ring.classList.toggle("is-label", !!labelled);
+      ring.classList.toggle("is-hover", !labelled && !!interactive);
+      label.textContent = labelled ? labelled.getAttribute("data-cursor") : "";
+    });
+
+    document.addEventListener("pointermove", function (e) {
+      const card = e.target.closest && e.target.closest("[data-drift]");
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--px", (((e.clientX - r.left) / r.width - 0.5) * 2).toFixed(3));
+      card.style.setProperty("--py", (((e.clientY - r.top) / r.height - 0.5) * 2).toFixed(3));
+    }, { passive: true });
+    document.addEventListener("pointerout", function (e) {
+      const card = e.target.closest && e.target.closest("[data-drift]");
+      if (card && !card.contains(e.relatedTarget)) {
+        card.style.setProperty("--px", "0");
+        card.style.setProperty("--py", "0");
+      }
+    });
   }
 
   // ---------------------------------------------------------------

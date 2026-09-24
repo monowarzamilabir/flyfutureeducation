@@ -34,12 +34,12 @@ from apps.team.models import Consultant
 from apps.trainings.models import TestPrepCourse
 
 
-def _poster_file(filename):
-    """Loads one of the real Fly Future Education Facebook campaign posters
-    (extracted from the client-provided posts.pdf) as a Django file object."""
+def _poster_file(filename, folder="posters"):
+    """Loads a bundled seed image as a Django file object. `posters/` holds the real Fly Future
+    Education campaign posters; `services/` holds photos used under the Unsplash License."""
     import os
 
-    path = os.path.join(os.path.dirname(__file__), "seed_assets", "posters", filename)
+    path = os.path.join(os.path.dirname(__file__), "seed_assets", folder, filename)
     with open(path, "rb") as f:
         return ContentFile(f.read(), name=filename)
 
@@ -101,17 +101,17 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------
     def _services(self):
         services = [
-            ("Student Visa Support", "document", "End-to-end student visa filing, documentation, and interview preparation."),
-            ("Visit Visa Support", "plane", "Guidance for short-term visit visas for family or exploratory trips abroad."),
-            ("Spouse Visa Support", "shield", "Dependent and spouse visa applications for students already studying abroad."),
-            ("Bank Statement & Financial Support", "bank", "Proof-of-funds guidance and financial documentation for embassy requirements."),
-            ("Application & Admission Support", "graduation", "University shortlisting and complete application filing on your behalf."),
-            ("Visa Processing Support", "document", "Full visa processing management from submission to decision."),
-            ("Accommodation Support", "home", "Help finding safe, affordable student housing at your destination."),
-            ("Air-Ticket & Immigration Support", "plane", "Flight booking guidance and pre-departure immigration briefing."),
+            ("Student Visa Support", "document", "End-to-end student visa filing, documentation, and interview preparation.", "student-visa.jpg"),
+            ("Visit Visa Support", "plane", "Guidance for short-term visit visas for family or exploratory trips abroad.", "visit-visa.jpg"),
+            ("Spouse Visa Support", "shield", "Dependent and spouse visa applications for students already studying abroad.", "spouse-visa.jpg"),
+            ("Bank Statement & Financial Support", "bank", "Proof-of-funds guidance and financial documentation for embassy requirements.", "bank-statement.jpg"),
+            ("Application & Admission Support", "graduation", "University shortlisting and complete application filing on your behalf.", "admission.jpg"),
+            ("Visa Processing Support", "document", "Full visa processing management from submission to decision.", "visa-processing.jpg"),
+            ("Accommodation Support", "home", "Help finding safe, affordable student housing at your destination.", "accommodation.jpg"),
+            ("Air-Ticket & Immigration Support", "plane", "Flight booking guidance and pre-departure immigration briefing.", "air-ticket.jpg"),
         ]
-        for i, (title, icon, desc) in enumerate(services, start=1):
-            Service.objects.get_or_create(
+        for i, (title, icon, desc, photo) in enumerate(services, start=1):
+            service, _ = Service.objects.get_or_create(
                 title=title,
                 defaults=dict(
                     short_description=desc,
@@ -121,6 +121,8 @@ class Command(BaseCommand):
                     order=i,
                 ),
             )
+            if not service.image:
+                service.image.save(photo, _poster_file(photo, folder="services"), save=True)
 
     # ------------------------------------------------------------------
     def _destinations(self):
